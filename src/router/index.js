@@ -23,6 +23,7 @@ let authPages = {
 	path: "/",
 	component: AuthLayout,
 	name: "Authentication",
+	redirect: "login",
 	children: [
 		{
 			path: "/login",

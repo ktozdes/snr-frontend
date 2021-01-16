@@ -5,15 +5,23 @@
         >
             <login-card header-color="grey">
                 <h4 slot="title" class="title">Log in</h4>
-                <md-field class="md-form-group" slot="inputs">
+                <md-field class="md-form-group" slot="inputs" :class="[{ 'md-error': validationError.email }]">
                     <md-icon>email</md-icon>
                     <label>Email...</label>
                     <md-input v-model="email" type="email"></md-input>
+                        <span v-for="(error, key) in validationError.email"
+                              :key="key"
+                              class="md-error">{{ error }}</span>
                 </md-field>
-                <md-field class="md-form-group" slot="inputs">
+                <md-field class="md-form-group" slot="inputs" :class="[{ 'md-error': validationError.password }]">
                     <md-icon>lock_outline</md-icon>
                     <label>Password...</label>
                     <md-input v-model="password" type="password" @keyup.enter="login"></md-input>
+                    <div v-if="validationError.password" >
+                        <span v-for="(error, key) in validationError.password"
+                              :key="key"
+                              class="md-error">{{ error }}</span>
+                    </div>
                 </md-field>
                 <md-button slot="footer" class="md-simple md-success md-lg" @click="login">
                     Lets Go
@@ -36,7 +44,8 @@ export default {
     data() {
         return {
             email: null,
-            password: null
+            password: null,
+            validationError: [],
         };
     },
     methods: {
@@ -55,7 +64,18 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    if (error.response.status === 422) {
+                        this.validationError = error.response.data.errors;
+                        this.$notify({
+                            timeout: 5000,
+                            message:
+                                error.response.data.message,
+                            icon: "add_alert",
+                            horizontalAlign: 'top',
+                            verticalAlign: 'left',
+                            type: 'danger'
+                        });
+                    }
                 });
         },
         testApi() {
