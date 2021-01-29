@@ -19,6 +19,12 @@ import Dashboard from "@/modules/Dashboard/Dashboard.vue";
 import Calendar from "@/modules/Dashboard/Calendar.vue";
 import RegularTables from "@/modules/Dashboard/Tables/RegularTables";
 
+import WordList from "@/modules/Word/WordList";
+import WordEditor from "@/modules/Word/WordEditor";
+
+import RoleList from "@/modules/Role/RoleList";
+import RoleEditor from "@/modules/Role/RoleEditor";
+
 let authPages = {
 	path: "/",
 	component: AuthLayout,
@@ -41,11 +47,60 @@ let authPages = {
 let dashboardPages = {
 	path: "/",
 	component: DashboardLayout,
-	name: "Dashboard",
+	name: "HomePage",
 	meta: {
 		middleware: ['auth']
 	},
 	children: [
+		{
+			path: "word",
+			name: "WordList",
+			components: {default: WordList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "word/edit/:id",
+			name: "WordEdit",
+			components: {default: WordEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+
+		{
+			path: "role",
+			name: "RoleList",
+			components: {default: RoleList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "word/create/",
+			name: "WordCreate",
+			components: {default: WordEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "role/edit/:id",
+			name: "RoleEdit",
+			components: {default: RoleEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "role/create/",
+			name: "RoleCreate",
+			components: {default: RoleEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
 		{
 			path: "regular-table",
 			name: "regularTable",

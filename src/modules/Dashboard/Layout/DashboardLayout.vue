@@ -19,6 +19,12 @@
           :link="{ name: 'Dashboard', icon: 'dashboard', path: '/dashboard' }"
         ></sidebar-item>
         <sidebar-item
+          :link="{ name: 'Role', icon: 'add_task', path: '/role' }"
+        ></sidebar-item>
+        <sidebar-item
+          :link="{ name: 'Word', icon: 'font_download', path: '/word' }"
+        ></sidebar-item>
+        <sidebar-item
           :link="{ name: 'Calendar', icon: 'date_range', path: '/calendar' }"
         ></sidebar-item>
         <sidebar-item :link="{ name: 'Tables', icon: 'grid_on' }">

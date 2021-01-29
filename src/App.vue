@@ -61,6 +61,24 @@ export default {
 
                 });
             }
+            this.axios.interceptors.response.use( (response) => {
+                console.log('interceptors.response', response)
+                if (response.status === 200 && response.data) {
+                    if (response.data?.success_message || response.data?.error_message){
+                        this.showFlashMessages(response.data);
+                    }
+                }
+                return response;
+            }, function (error) {
+            if (error.response.status === 422) {
+                if (error.response.data?.message) {
+                    this.showFlashMessages({'error_message': [error.response.data.message]});
+                }
+            }
+            else {
+                return Promise.reject(error);
+            }
+        });
 
         },
         disableInterceptor() {

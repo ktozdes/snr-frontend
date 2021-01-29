@@ -99,7 +99,7 @@ export default {
     },
     logo: {
       type: String,
-      default: "./img/vue-logo.png"
+      default: "/img/vue-logo.png"
     },
     sidebarLinks: {
       type: Array,

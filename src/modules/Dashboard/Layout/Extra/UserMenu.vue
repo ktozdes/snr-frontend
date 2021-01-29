@@ -79,7 +79,7 @@ export default {
     },
     avatar: {
       type: String,
-      default: "./img/faces/avatar.jpg"
+      default: "/img/faces/avatar.jpg"
     }
   },
   data() {

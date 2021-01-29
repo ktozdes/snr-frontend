@@ -27,6 +27,9 @@ import store from "./store";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
+require('./vue.filter');
+require('./vue.mixin');
+
 window.BASE_URL = process.env.VUE_APP_API_URL;
 
 // plugin setup
@@ -43,7 +46,7 @@ const startVue = () => {
 		el: "#app",
 		render: h => h(App),
 		router,
-		store,
+		store
 	});
 }
 

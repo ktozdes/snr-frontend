@@ -24,6 +24,7 @@ import TimeLineItem from "./Timeline/TimeLineItem.vue";
 import Tabs from "./Tabs.vue";
 import Collapse from "./Collapse.vue";
 import Slider from "./Slider.vue";
+import Reaction from "./Reaction.vue";
 import SimpleWizard from "./Wizard/Wizard.vue";
 import WizardTab from "./Wizard/WizardTab.vue";
 import AsyncWorldMap from "./WorldMap/AsyncWorldMap.vue";
@@ -35,30 +36,33 @@ import SidebarPlugin from "./SidebarPlugin";
 import AnimatedNumber from "./AnimatedNumber";
 
 export {
-  IconCheckbox,
-  Badge,
-  Modal,
-  Pagination,
-  GlobalSalesTable,
-  LockCard,
-  PricingCard,
-  SignupCard,
-  TestimonialCard,
-  StatsCard,
-  LoginCard,
-  ChartCard,
-  GlobalSalesCard,
-  NavTabsCard,
-  ProductCard,
-  DropDown,
-  SidebarPlugin,
-  TimeLine,
-  TimeLineItem,
-  Tabs,
-  Slider,
-  SimpleWizard,
-  WizardTab,
-  AnimatedNumber,
-  Collapse,
-  AsyncWorldMap
+	IconCheckbox,
+	Badge,
+	Modal,
+	Pagination,
+	GlobalSalesTable,
+	LockCard,
+	PricingCard,
+	SignupCard,
+	TestimonialCard,
+	StatsCard,
+	LoginCard,
+	ChartCard,
+	GlobalSalesCard,
+	NavTabsCard,
+	ProductCard,
+	DropDown,
+	SidebarPlugin,
+	TimeLine,
+	TimeLineItem,
+	Tabs,
+	Slider,
+	SimpleWizard,
+	WizardTab,
+	AnimatedNumber,
+	Collapse,
+	AsyncWorldMap,
+
+	//Custom Components
+	Reaction
 };
