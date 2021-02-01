@@ -96,7 +96,6 @@ export default {
                 .catch(error => {
                     if (error.response.status === 422) {
                         this.validationError = error.response.data.errors;
-                        this.fieldClass = 'md-invalid';
                     }
                 });
         }

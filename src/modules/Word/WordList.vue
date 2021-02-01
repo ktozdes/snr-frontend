@@ -7,25 +7,25 @@
                         <md-icon>font_download</md-icon>
                     </div>
                     <h4 class="title">{{ 'Words' | translate }}</h4>
-                    <router-link :to="{path: 'word/create/'}">
+                    <router-link  v-if="canDo('Words', 'can_create')" :to="{path: 'word/create/'}">
                         <div class="card-icon card-icon-right">
                             <md-icon>add</md-icon>
                         </div>
                     </router-link>
                 </md-card-header>
                 <md-card-content>
-                    <md-table v-model="tableData" table-header-color="green">
+                    <md-table v-model="items" table-header-color="green">
                         <md-table-row slot="md-table-row" slot-scope="{ item }">
                             <md-table-cell md-label="ID">{{ item.id }}</md-table-cell>
                             <md-table-cell md-label="Word">{{ item.word }}</md-table-cell>
                             <md-table-cell md-label="Reaction" style="width:300px;text-align: center">
-                                <reaction :reactions="item.reaction"></reaction>
+                                <reaction :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
                             </md-table-cell>
                             <md-table-cell md-label="Action" style="width:200px;text-align: right">
-                                <md-button :to="{path: 'word/edit/' + 2}" class="md-just-icon md-success">
-                                    <md-icon>edit</md-icon>
-                                </md-button>
-                                <md-button class="md-just-icon md-danger" >
+<!--                                <md-button v-if="canDo('Words', 'can_edit')" :to="{path: 'word/edit/' + item.id}" class="md-just-icon md-success">-->
+<!--                                    <md-icon>edit</md-icon>-->
+<!--                                </md-button>-->
+                                <md-button v-if="canDo('Words', 'can_delete')" class="md-just-icon md-danger" @click="destroy(item.id)">
                                     <md-icon>delete</md-icon>
                                 </md-button>
                             </md-table-cell>
@@ -38,66 +38,52 @@
 </template>
 <script>
 import Reaction from "@/components/Reaction";
+import Swal from "sweetalert2";
 
 export default {
     components: {Reaction},
     data() {
         return {
-            selected: [],
-            tableData: [
-                {
-                    id: 1,
-                    word: "Hello",
-                    reaction: {
-                        positive: 1,
-                        negative: 3,
-                        neutral: 2
-                    },
-                    action: "Niger",
-                },
-                {
-                    id: 2,
-                    word: "Bye",
-                    reaction: {
-                        positive: 60,
-                        negative: 10,
-                        neutral: 30
-                    },
-                    action: "Niger",
-                },
-                {
-                    id: 3,
-                    word: "Best",
-                    reaction: {
-                        positive: 100,
-                        negative: 0,
-                        neutral: 0
-                    },
-                    action: "Niger",
-                },
-                {
-                    id: 4,
-                    word: "Fuck",
-                    reaction: {
-                        positive: 0,
-                        negative: 90,
-                        neutral: 10
-                    },
-                    action: "Niger",
-                },
-            ],
-
+            items: [],
         };
     },
+    created() {
+        this.getItems();
+    },
     methods: {
-        testApi() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/test-close')
+        getItems() {
+            this.axios.get(process.env.VUE_APP_API_URL + '/word')
                 .then(response => {
-                    console.log(response);
+                    this.items = response.data.items;
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.log(error);
                 });
+        },
+        destroy(wordID) {
+            Swal.fire({
+                title: this.$options.filters.translate("Delete Word?"),
+                text: this.$options.filters.translate("Do you really want to delete?"),
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: this.$options.filters.translate("Yes"),
+                cancelButtonText: this.$options.filters.translate("No"),
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+                    this.axios.delete(process.env.VUE_APP_API_URL + '/word/destroy/' + wordID)
+                    .then(response => {
+                        if (response.status === 200) {
+                            this.getItems();
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }
+            });
         }
     }
 };
