@@ -60,6 +60,7 @@ export default {
                         user.access_token = response.data.access_token;
                         user.is_authorized = true;
                         this.$store.dispatch('login', user);
+                        this.$store.dispatch('setPermissions', response.data.permissions);
                         this.$router.push("regular-table");
                     }
                 })

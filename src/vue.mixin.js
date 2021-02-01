@@ -4,10 +4,10 @@ Vue.mixin({
 	data() {
 		return {
 			userRole: null,
+            permissions: this.$store.getters.getPermissions
 		}
 	},
 	created() {
-
 	},
 	methods: {
 		showFlashMessages(params) {
@@ -35,6 +35,12 @@ Vue.mixin({
 					});
 				});
 			}
+		},
+		canDo(permission, action) {
+			if (this.permissions[permission][action]) {
+				return this.permissions[permission][action];
+			}
+			return false;
 		},
 		setUserRole(userRole) {
 			this.userRole = userRole;

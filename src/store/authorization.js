@@ -6,10 +6,14 @@ export default {
 		user: new User({
 			access_token : localStorage.getItem('access_token')
 		}),
+		permissions: []
 	},
 	getters: {
 		getUser(state) {
 			return state.user;
+		},
+		getPermissions(state) {
+			return state.permissions;
 		}
 	},
 	actions: {
@@ -19,19 +23,26 @@ export default {
 			}
 			state.commit('login', user);
 		},
-		logout(state, user) {
+		logout(state) {
 			localStorage.removeItem('access_token');
-			state.commit('logout', user);
-		}
+			state.commit('logout');
+		},
+		setPermissions(state, permissions) {
+			state.commit('setPermissions', permissions);
+		},
 	},
 	mutations: {
 		login(state, user) {
 			state.user = user;
 			console.log('%c login', 'color: #3273dc', state.user);
 		},
-		logout(state, user) {
+		logout(state) {
 			state.user = new User();
 			console.log('%c logout', 'color: #3273dc', state.user);
-		}
+		},
+		setPermissions(state, permissions) {
+			state.permissions = permissions;
+			console.log('%c setPermissions', 'color: #3273dc', state.permissions);
+		},
 	}
 };

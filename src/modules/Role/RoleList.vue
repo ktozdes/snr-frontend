@@ -7,7 +7,7 @@
                         <md-icon>add_task</md-icon>
                     </div>
                     <h4 class="title">{{ 'Roles' | translate }}</h4>
-                    <router-link :to="{path: 'role/create/'}">
+                    <router-link  v-if="canDo('User Roles', 'can_create')" :to="{path: 'role/create/'}">
                         <div class="card-icon card-icon-right">
                             <md-icon>add</md-icon>
                         </div>
@@ -19,10 +19,10 @@
                             <md-table-cell md-label="ID">{{ item.id }}</md-table-cell>
                             <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
                             <md-table-cell md-label="Action" style="width:200px;text-align: right">
-                                <md-button :to="{path: 'role/edit/' + item.id}" class="md-just-icon md-success">
+                                <md-button v-if="canDo('User Roles', 'can_edit')" :to="{path: 'role/edit/' + item.id}" class="md-just-icon md-success">
                                     <md-icon>edit</md-icon>
                                 </md-button>
-                                <md-button class="md-just-icon md-danger" @click="destroyRole(item.id)">
+                                <md-button v-if="canDo('User Roles', 'can_delete')" class="md-just-icon md-danger" @click="destroyRole(item.id)">
                                     <md-icon>delete</md-icon>
                                 </md-button>
                             </md-table-cell>

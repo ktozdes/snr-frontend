@@ -32,7 +32,7 @@ export default {
             if (user.access_token) {
                 this.axiosInterceptor = this.axios.interceptors.request.use(config => {
                     config.headers.Authorization = `Bearer ` + user.access_token;
-                    console.log('request', config, user);
+                    //console.log('request', config, user);
                     return config;
                 }, error => {
                     return Promise.reject(error);
@@ -49,7 +49,7 @@ export default {
                 this.axios.interceptors.request.eject(this.axiosInterceptor);
                 this.axiosInterceptor = this.axios.interceptors.request.use(config => {
                     config.headers.Authorization = `Bearer `;
-                    console.log('request', config, user);
+                    //console.log('request', config, user);
                     return config;
                 }, error => {
                     return Promise.reject(error);
@@ -62,7 +62,7 @@ export default {
                 });
             }
             this.axios.interceptors.response.use( (response) => {
-                console.log('interceptors.response', response)
+                //console.log('interceptors.response', response)
                 if (response.status === 200 && response.data) {
                     if (response.data?.success_message || response.data?.error_message){
                         this.showFlashMessages(response.data);
