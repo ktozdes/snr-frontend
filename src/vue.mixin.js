@@ -37,13 +37,10 @@ Vue.mixin({
 			}
 		},
 		canDo(permission, action) {
-			if (this.permissions[permission][action]) {
+			if (this.permissions[permission] && this.permissions[permission][action] ) {
 				return this.permissions[permission][action];
 			}
 			return false;
-		},
-		setUserRole(userRole) {
-			this.userRole = userRole;
 		},
 		isJson(str) {
 			try {

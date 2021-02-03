@@ -1,8 +1,7 @@
 <template>
     <div class="full-page" :class="{ 'nav-open': $sidebar.showSidebar }">
-
         <notifications></notifications>
-        <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute">
+        <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute" v-if="$route.name !== 'NotFound'">
             <div class="md-toolbar-row md-offset">
                 <div class="md-toolbar-section-start">
                     <h3 class="md-title">{{ $route.name }}</h3>
@@ -88,7 +87,8 @@ export default {
                 Pricing: "./img/bg-pricing.jpg",
                 Login: "./img/login.jpg",
                 Register: "./img/register.jpg",
-                Lock: "./img/lock.jpg"
+                Lock: "./img/lock.jpg",
+                NotFound: "./img/404.jpg",
             };
             return {
                 backgroundImage: `url(${images[this.$route.name]})`

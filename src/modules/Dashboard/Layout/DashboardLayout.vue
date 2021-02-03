@@ -21,6 +21,9 @@
                 <sidebar-item v-if="canDo('User Roles', 'can_view')"
                     :link="{ name: 'Role', icon: 'add_task', path: '/role' }"
                 ></sidebar-item>
+                <sidebar-item  v-if="canDo('Posts', 'can_view')"
+                    :link="{ name: 'Post', icon: 'article', path: '/post' }"
+                ></sidebar-item>
                 <sidebar-item  v-if="canDo('Words', 'can_view')"
                     :link="{ name: 'Word', icon: 'font_download', path: '/word' }"
                 ></sidebar-item>

@@ -61,7 +61,7 @@ if (user.access_token) {
 		}
 	})
 	.then(response => {
-		let tempUser = new User(response.data);
+		let tempUser = new User(response.data.user);
 		tempUser.access_token = user.access_token;
 		tempUser.is_authorized = true;
 		store.dispatch('login', tempUser);

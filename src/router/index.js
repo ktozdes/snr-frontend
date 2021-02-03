@@ -27,6 +27,23 @@ import WordSelector2 from "@/modules/Word/WordSelector2";
 import RoleList from "@/modules/Role/RoleList";
 import RoleEditor from "@/modules/Role/RoleEditor";
 
+import PostList from "@/modules/Post/PostList";
+import PostEditor from "@/modules/Post/PostEditor";
+
+import Error404 from "@/modules/ErrorPages/404";
+
+let errorPages = {
+	path: "*",
+	component: AuthLayout,
+	name: "Authentication",
+	children: [
+		{
+			path: '/',
+			name: 'NotFound',
+			components: {default: Error404}
+		},
+	]
+};
 let authPages = {
 	path: "/",
 	component: AuthLayout,
@@ -86,19 +103,18 @@ let dashboardPages = {
 				middleware: ['auth']
 			},
 		},
-
 		{
-			path: "role",
-			name: "RoleList",
-			components: {default: RoleList},
+			path: "word/create/",
+			name: "WordCreate",
+			components: {default: WordEditor},
 			meta: {
 				middleware: ['auth']
 			},
 		},
 		{
-			path: "word/create/",
-			name: "WordCreate",
-			components: {default: WordEditor},
+			path: "role",
+			name: "RoleList",
+			components: {default: RoleList},
 			meta: {
 				middleware: ['auth']
 			},
@@ -115,6 +131,22 @@ let dashboardPages = {
 			path: "role/create/",
 			name: "RoleCreate",
 			components: {default: RoleEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "post",
+			name: "PostList",
+			components: {default: PostList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "post/edit/:id",
+			name: "PostEdit",
+			components: {default: PostEditor},
 			meta: {
 				middleware: ['auth']
 			},
@@ -156,7 +188,8 @@ let dashboardPages = {
 
 const routes = [
 	authPages,
-	dashboardPages
+	dashboardPages,
+	errorPages
 ];
 
 
@@ -174,7 +207,6 @@ router.beforeEach((to, from, next) => {
 	}
 
 	const user = store.getters.getUser;
-	console.log('router', user);
 	if (to.meta.middleware.includes("auth") && user.is_authorized !== true) {
 		next('/login');
 		return false;
