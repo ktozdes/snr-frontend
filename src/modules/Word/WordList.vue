@@ -14,17 +14,20 @@
                     </router-link>
                 </md-card-header>
                 <md-card-content>
+
                     <md-table v-model="items" table-header-color="green">
-                        <md-table-row slot="md-table-row" slot-scope="{ item }">
-                            <md-table-cell md-label="ID">{{ item.id }}</md-table-cell>
-                            <md-table-cell md-label="Word">{{ item.word }}</md-table-cell>
-                            <md-table-cell md-label="Reaction" style="width:300px;text-align: center">
-                                <reaction :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
-                            </md-table-cell>
-                            <md-table-cell md-label="Action" style="width:200px;text-align: right">
-<!--                                <md-button v-if="canDo('Words', 'can_edit')" :to="{path: 'word/edit/' + item.id}" class="md-just-icon md-success">-->
-<!--                                    <md-icon>edit</md-icon>-->
-<!--                                </md-button>-->
+                        <md-table-row>
+                            <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Word' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Reaction' | translate }}</md-table-head>
+                            <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                        </md-table-row>
+
+                        <md-table-row v-for="(item, index) in items" :key="index">
+                            <md-table-cell>{{ item.id }}</md-table-cell>
+                            <md-table-cell>{{ item.word }}</md-table-cell>
+                            <md-table-cell style="width:300px;text-align: center"><reaction :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction></md-table-cell>
+                            <md-table-cell class="md-text-align-right">
                                 <md-button v-if="canDo('Words', 'can_delete')" class="md-just-icon md-danger" @click="destroy(item.id)">
                                     <md-icon>delete</md-icon>
                                 </md-button>
