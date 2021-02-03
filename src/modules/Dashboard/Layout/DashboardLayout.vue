@@ -25,7 +25,10 @@
                     :link="{ name: 'Word', icon: 'font_download', path: '/word' }"
                 ></sidebar-item>
                 <sidebar-item  v-if="canDo('Words', 'can_view')"
-                    :link="{ name: 'Word selector', icon: 'font_download', path: '/word/selector' }"
+                    :link="{ name: 'Word selector', icon: 'mediation', path: '/word/selector' }"
+                ></sidebar-item>
+                <sidebar-item  v-if="canDo('Words', 'can_view')"
+                    :link="{ name: 'Word selector 2', icon: 'mediation', path: '/word/selector-2' }"
                 ></sidebar-item>
                 <sidebar-item
                     :link="{ name: 'Calendar', icon: 'date_range', path: '/calendar' }"

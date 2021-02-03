@@ -22,6 +22,7 @@ import RegularTables from "@/modules/Dashboard/Tables/RegularTables";
 import WordList from "@/modules/Word/WordList";
 import WordEditor from "@/modules/Word/WordEditor";
 import WordSelector from "@/modules/Word/WordSelector";
+import WordSelector2 from "@/modules/Word/WordSelector2";
 
 import RoleList from "@/modules/Role/RoleList";
 import RoleEditor from "@/modules/Role/RoleEditor";
@@ -73,6 +74,14 @@ let dashboardPages = {
 			path: "word/selector",
 			name: "WordSelector",
 			components: {default: WordSelector},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "word/selector-2",
+			name: "WordSelector2",
+			components: {default: WordSelector2},
 			meta: {
 				middleware: ['auth']
 			},
