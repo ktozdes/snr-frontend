@@ -4,41 +4,14 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>{{ word.id ? 'edit' : 'add' }}</md-icon>
+                        <md-icon>edit</md-icon>
                         <md-icon>font_download</md-icon>
                     </div>
-                    <h4 class="title">{{ (word.id ? 'Edit word' : 'Create word') | translate }}</h4>
+                    <h4 class="title">{{ 'Edit post' | translate }}</h4>
                 </md-card-header>
                 <md-card-content>
                     <md-card-content>
-                        <md-field :class="{'md-invalid' : !nameIsValid}">
-                            <label>{{ 'Word' | translate }}</label>
-                            <md-input v-model="word.word" type="text"></md-input>
-                            <span v-for="(error, key) in validationError.word"
-                              :key="key"
-                              class="md-error">{{ error }}</span>
-                        </md-field>
-                        <md-field :class="{'md-invalid' : !positiveIsValid}">
-                            <label class="md-green-text">{{ 'Positive' | translate }}</label>
-                            <md-input v-model="word.positive_total" type="number"></md-input>
-                            <span v-for="(error, key) in validationError.positive_total"
-                              :key="key"
-                              class="md-error">{{ error }}</span>
-                        </md-field>
-                        <md-field :class="{'md-invalid' : !neutralIsValid}">
-                            <label>{{ 'Neutral' | translate }}</label>
-                            <md-input v-model="word.neutral_total" type="number"></md-input>
-                            <span v-for="(error, key) in validationError.neutral_total"
-                              :key="key"
-                              class="md-error">{{ error }}</span>
-                        </md-field>
-                        <md-field :class="{'md-invalid' : !negativeIsValid}">
-                            <label class="md-red-text">{{ 'Negative' | translate }}</label>
-                            <md-input v-model="word.negative_total" type="number"></md-input>
-                            <span v-for="(error, key) in validationError.negative_total"
-                              :key="key"
-                              class="md-error">{{ error }}</span>
-                        </md-field>
+                        Salem deti
                     </md-card-content>
 
                     <md-card-actions md-alignment="left">
@@ -82,20 +55,6 @@ export default {
                 });
         }
     },
-    computed: {
-        nameIsValid() {
-            return (!(!this.word.name || this.validationError.word));
-        },
-        positiveIsValid() {
-            return (!(!this.word.name || this.validationError.word));
-        },
-        neutralIsValid() {
-            return (!(!this.word.name || this.validationError.word));
-        },
-        negativeIsValid() {
-            return (!(!this.word.name || this.validationError.word));
-        },
-    }
 };
 </script>
 <style scoped>

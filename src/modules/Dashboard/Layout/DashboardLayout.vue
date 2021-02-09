@@ -27,20 +27,6 @@
                 <sidebar-item  v-if="canDo('Words', 'can_view')"
                     :link="{ name: 'Word', icon: 'font_download', path: '/word' }"
                 ></sidebar-item>
-                <sidebar-item  v-if="canDo('Words', 'can_view')"
-                    :link="{ name: 'Word selector', icon: 'mediation', path: '/word/selector' }"
-                ></sidebar-item>
-                <sidebar-item  v-if="canDo('Words', 'can_view')"
-                    :link="{ name: 'Word selector 2', icon: 'mediation', path: '/word/selector-2' }"
-                ></sidebar-item>
-                <sidebar-item
-                    :link="{ name: 'Calendar', icon: 'date_range', path: '/calendar' }"
-                ></sidebar-item>
-                <sidebar-item :link="{ name: 'Tables', icon: 'grid_on' }">
-                    <sidebar-item
-                        :link="{ name: 'Regular Tables', path: '/regular-table' }"
-                    ></sidebar-item>
-                </sidebar-item>
             </template>
         </side-bar>
         <div class="main-panel">

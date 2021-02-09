@@ -22,13 +22,15 @@ import RegularTables from "@/modules/Dashboard/Tables/RegularTables";
 import WordList from "@/modules/Word/WordList";
 import WordEditor from "@/modules/Word/WordEditor";
 import WordSelector from "@/modules/Word/WordSelector";
-import WordSelector2 from "@/modules/Word/WordSelector2";
 
 import RoleList from "@/modules/Role/RoleList";
 import RoleEditor from "@/modules/Role/RoleEditor";
 
 import PostList from "@/modules/Post/PostList";
 import PostEditor from "@/modules/Post/PostEditor";
+
+import CommentList from "@/modules/Comment/CommentList";
+import CommentEditor from "@/modules/Comment/CommentEditor";
 
 import Error404 from "@/modules/ErrorPages/404";
 
@@ -96,14 +98,6 @@ let dashboardPages = {
 			},
 		},
 		{
-			path: "word/selector-2",
-			name: "WordSelector2",
-			components: {default: WordSelector2},
-			meta: {
-				middleware: ['auth']
-			},
-		},
-		{
 			path: "word/create/",
 			name: "WordCreate",
 			components: {default: WordEditor},
@@ -152,6 +146,22 @@ let dashboardPages = {
 			},
 		},
 		{
+			path: "comment/:post_id",
+			name: "CommentList",
+			components: {default: CommentList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "comment/edit/:id",
+			name: "CommentEditor",
+			components: {default: CommentEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
 			path: "regular-table",
 			name: "regularTable",
 			components: {default: RegularTables},
@@ -187,8 +197,8 @@ let dashboardPages = {
 
 
 const routes = [
-	authPages,
 	dashboardPages,
+	authPages,
 	errorPages
 ];
 

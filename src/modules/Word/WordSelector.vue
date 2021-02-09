@@ -8,15 +8,45 @@
                     </div>
                     <h4 class="title">{{ 'Select words' | translate }}</h4>
                 </md-card-header>
-                <md-card-content>
-                    <md-card-content>
-                        <p ref="target">Участие в онлайновой конференции бесплатное. Всем желающим участвовать нужно предварительно
-                            зарегистрироваться на сайте, трансляция докладов будет вестись из личных кабинетов. Если уже
-                            оплатили PGConf.Russia 2021, то регистрироваться повторно не нужно. Регистрация
-                            действительна для обоих событий — PGConf.Online и ближайшего PGConf.Russia. Также можно
-                            отказаться от участия в PGConf.Russia и вернуть свои деньги. Для этого надо написать на
-                            info@pgconf.ru.</p>
-                    </md-card-content>
+                <md-card-content v-if="comment && comment.content">
+                    <md-table table-header-color="green">
+                        <md-table-row>
+                            <md-table-cell>
+                                <md-field>
+                                    <label class="md-red-text">{{ 'Selected word' | translate }}:</label>
+                                    <md-input type="text" v-model="tempWord.word"></md-input>
+                                </md-field>
+                            </md-table-cell>
+                            <md-table-cell class="text-center">
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': tempWord.positive_total === 1}"
+                                           @click="setReaction(tempWord, 'positive')">
+                                    <md-icon>thumb_up</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': tempWord.neutral_total === 1}"
+                                           @click="setReaction(tempWord, 'neutral')">
+                                    <md-icon>thumbs_up_down</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': tempWord.negative_total === 1}"
+                                           @click="setReaction(tempWord, 'negative')">
+                                    <md-icon>thumb_down</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                            <md-table-cell class="md-text-align-right">
+                                <md-button class="md-just-icon md-simple md-primary" @click="saveTempWord()">
+                                    <md-icon>check</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-simple md-danger" @click="resetTempWord()">
+                                    <md-icon>close</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                        </md-table-row>
+                    </md-table>
+
+
+                    <p ref="target">{{ comment.content }}</p>
 
                     <md-table table-header-color="green">
                         <md-table-row>
@@ -28,14 +58,25 @@
                         <md-table-row v-for="(item, index) in words" :key="index">
                             <md-table-cell>{{ item.word }}</md-table-cell>
                             <md-table-cell>
-                                <div class="md-group">
-                                    <md-button class="md-button reaction-button md-theme-default" :class="{'md-info': item.positive_total === 1}" @click="setReaction(index, 'positive')">{{ 'Positive' | translate }}</md-button>
-                                    <md-button class="md-button reaction-button md-theme-default" :class="{'md-info': item.neutral_total === 1}" @click="setReaction(index, 'neutral')">{{ 'Neutral' | translate }}</md-button>
-                                    <md-button class="md-button reaction-button md-theme-default" :class="{'md-info': item.negative_total === 1}" @click="setReaction(index, 'negative')">{{ 'Negative' | translate }}</md-button>
-                                </div>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': item.positive_total === 1}"
+                                           @click="setReaction(item, 'positive')">
+                                    <md-icon>thumb_up</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': item.neutral_total === 1}"
+                                           @click="setReaction(item, 'neutral')">
+                                    <md-icon>thumbs_up_down</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': item.negative_total === 1}"
+                                           @click="setReaction(item, 'negative')">
+                                    <md-icon>thumb_down</md-icon>
+                                </md-button>
                             </md-table-cell>
                             <md-table-cell style="width:300px;text-align: center">
-                                <md-button class="md-just-icon md-danger" @click="removeWord(index)"><md-icon>delete</md-icon>
+                                <md-button class="md-just-icon md-danger" @click="removeWord(index)">
+                                    <md-icon>delete</md-icon>
                                 </md-button>
                             </md-table-cell>
                         </md-table-row>
@@ -47,6 +88,9 @@
                         </md-button>
                     </md-card-actions>
                 </md-card-content>
+                <md-card-content v-else>
+                    <h3>{{ 'No comment selected' | translate }}</h3>
+                </md-card-content>
             </md-card>
         </div>
     </div>
@@ -57,7 +101,11 @@ import {Word} from '@/interfaces/Word';
 export default {
     data() {
         return {
+            comment: this.$store.getters.getRouterProp,
             words: [],
+            tempWord: new Word({
+                word: ''
+            }),
             validationError: [],
         };
     },
@@ -70,45 +118,62 @@ export default {
     },
     methods: {
         submit() {
-            console.log(this.words);
+            if (this.words.length > 0) {
+                const url = process.env.VUE_APP_API_URL + '/word/mass-store';
+                this.axios.post(url, {words: this.words})
+                    .then(response => {
+                        this.resetAll();
+                    })
+                    .catch(error => {
+                    });
+            }
+
         },
-        setReaction(index, reaction) {
-            this.words[index].positive_total = 0;
-            this.words[index].neutral_total = 0;
-            this.words[index].negative_total = 0;
+        setReaction(tmpWord, reaction) {
+            tmpWord.positive_total = 0;
+            tmpWord.neutral_total = 0;
+            tmpWord.negative_total = 0;
 
             if (reaction === 'positive') {
-                this.words[index].positive_total = 1;
+                tmpWord.positive_total = 1;
+            } else if (reaction === 'neutral') {
+                tmpWord.neutral_total = 1;
+            } else if (reaction === 'negative') {
+                tmpWord.negative_total = 1;
             }
-            else if (reaction === 'neutral') {
-                this.words[index].neutral_total = 1;
+        },
+        saveTempWord() {
+            if (this.tempWord.word.trim() !== '') {
+                this.words.push(this.tempWord);
+                this.resetTempWord();
             }
-            else if (reaction === 'negative') {
-                this.words[index].negative_total = 1;
-            }
+        },
+        resetTempWord() {
+            this.tempWord = new Word({
+                word: ''
+            })
+        },
+        resetAll() {
+            this.words = [];
+            this.resetTempWord();
         },
         removeWord(deletingIndex) {
             this.words.splice(deletingIndex, 1);
         },
         pushText() {
-            if (window.getSelection().toString().length > 0) {
-                let tmpWord = new Word({
-                    word: window.getSelection().toString()
-                })
-                this.words.push(tmpWord);
+            let tempString = window.getSelection().toString().trim();
+            if (tempString.length > 0 && tempString !== '') {
+                this.tempWord.word = this.tempWord.word
+                    ? this.tempWord.word + ' ' + tempString
+                    : tempString;
             }
-            console.log(this.words);
-        }
+        },
     },
-    computed: {
-        // filteredWord() {
-        //     return this.words;
-        // }
-    }
+    computed: {}
 };
 </script>
 <style scoped>
-.reaction-button{
+.reaction-button {
     height: 50px;
 }
 </style>
