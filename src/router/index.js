@@ -26,6 +26,9 @@ import WordSelector from "@/modules/Word/WordSelector";
 import RoleList from "@/modules/Role/RoleList";
 import RoleEditor from "@/modules/Role/RoleEditor";
 
+import OrganizationList from "@/modules/Organization/OrganizationList";
+import OrganizationEditor from "@/modules/Organization/OrganizationEditor";
+
 import PostList from "@/modules/Post/PostList";
 import PostEditor from "@/modules/Post/PostEditor";
 
@@ -125,6 +128,30 @@ let dashboardPages = {
 			path: "role/create/",
 			name: "RoleCreate",
 			components: {default: RoleEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "organization",
+			name: "OrganizationList",
+			components: {default: OrganizationList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "organization/edit/:id",
+			name: "OrganizationEdit",
+			components: {default: OrganizationEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "organization/create/",
+			name: "OrganizationCreate",
+			components: {default: OrganizationEditor},
 			meta: {
 				middleware: ['auth']
 			},

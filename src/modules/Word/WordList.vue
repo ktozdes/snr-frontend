@@ -7,7 +7,7 @@
                         <md-icon>font_download</md-icon>
                     </div>
                     <h4 class="title">{{ 'Words' | translate }}</h4>
-                    <router-link  v-if="canDo('Words', 'can_create')" :to="{path: 'word/create/'}">
+                    <router-link  v-if="canDo('Word', 'can_create')" :to="{path: 'word/create/'}">
                         <div class="card-icon card-icon-right">
                             <md-icon>add</md-icon>
                         </div>
@@ -28,13 +28,15 @@
                             <md-table-cell>{{ item.word }}</md-table-cell>
                             <md-table-cell style="width:300px;text-align: center"><reaction :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction></md-table-cell>
                             <md-table-cell class="md-text-align-right">
-                                <md-button v-if="canDo('Words', 'can_delete')" class="md-just-icon md-danger" @click="destroy(item.id)">
+                                <md-button v-if="canDo('Word', 'can_delete')" class="md-just-icon md-danger" @click="destroy(item.id)">
                                     <md-icon>delete</md-icon>
                                 </md-button>
                             </md-table-cell>
                         </md-table-row>
                     </md-table>
                 </md-card-content>
+                <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate" >
+                </pagination>
             </md-card>
         </div>
     </div>
@@ -42,20 +44,31 @@
 <script>
 import Reaction from "@/components/Reaction";
 import Swal from "sweetalert2";
+import {Pagination} from "@/components";
 
 export default {
-    components: {Reaction},
+    components: {
+        Pagination,
+        Reaction
+    },
     data() {
         return {
             items: [],
+            currentPage: 1,
+            pageCount: 0,
         };
     },
     created() {
         this.getItems();
     },
     methods: {
+        paginate() {
+            this.getItems();
+        },
         getItems() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/word')
+            this.axios.get(process.env.VUE_APP_API_URL + '/word', {
+                params: {page: this.currentPage}
+            })
                 .then(response => {
                     this.items = response.data.items;
                 })

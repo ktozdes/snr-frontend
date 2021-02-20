@@ -101,9 +101,15 @@
               Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
             </p>
           </div>
+            <pagination
+    type="success"
+    v-model="colorPagination"
+    :page-count="3">
+  </pagination>
           <pagination
             class="pagination-no-border pagination-success"
             v-model="pagination.currentPage"
+            :page-count="3"
             :per-page="pagination.perPage"
             :total="total"
           >

@@ -38,7 +38,7 @@
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
                             <md-table-cell>{{ item.content }}</md-table-cell>
                             <md-table-cell class="md-text-align-right">
-                                <md-button v-if="canDo('Words', 'can_create')" @click="selectWords(item)"
+                                <md-button v-if="canDo('Word', 'can_create')" @click="selectWords(item)"
                                            class="md-just-icon md-success">
                                     <md-icon>edit</md-icon>
                                 </md-button>
@@ -92,7 +92,7 @@ export default {
             this.$router.push({ name: 'WordSelector'});
         },
         getThumbnail() {
-            return "http://localhost:5050/api/images/" + this.post.thumbnail;
+            return process.env.VUE_APP_API_URL + "/image/proxy/" + this.post.thumbnail;
         },
         hasProcessed(item) {
             return item.id % 2 === 0;

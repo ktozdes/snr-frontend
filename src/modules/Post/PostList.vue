@@ -22,8 +22,8 @@
                         <md-table-row v-for="(item, index) in items" :key="index">
                             <md-table-cell>{{ item.id }}</md-table-cell>
                             <md-table-cell>
-                                <a v-if="canDo('Comments', 'can_view')" @click="gotoComments(item)"
-                                             class="md-link primary" href="javascript:void(0)">{{ item.code }}
+                                <a v-if="canDo('Comment', 'can_view')" @click="gotoComments(item)"
+                                   class="md-link primary" href="javascript:void(0)">{{ item.code }}
                                 </a>
                                 <span v-else>
                                     {{ item.code }}
@@ -39,39 +39,58 @@
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
                         </md-table-row>
                     </md-table>
+
+                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate" >
+                </pagination>
                 </md-card-content>
             </md-card>
         </div>
     </div>
 </template>
 <script>
-import Swal from "sweetalert2";
+import {Pagination} from "@/components";
 
 export default {
+    components: {
+        Pagination
+    },
     data() {
         return {
             items: [],
+            currentPage: 1,
+            pageCount: 0,
         };
     },
     created() {
         this.getItems();
     },
     methods: {
+        paginate() {
+            this.getItems();
+        },
         getItems() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/post')
+            this.axios.get(process.env.VUE_APP_API_URL + '/post', {
+                params: {page: this.currentPage}
+            })
                 .then(response => {
                     this.items = response.data.items;
+                    this.pageCount = response.data.pagination.page_count;
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
         getThumbnail($fileName) {
-            return "http://localhost:5050/api/images/" + $fileName;
+            return process.env.VUE_APP_API_URL + "/image/proxy/" + $fileName;
         },
-        gotoComments( item ) {
-            this.$store.dispatch('setRouterProp',item);
-            this.$router.push({ name: 'CommentList', params: { post_id: item.id } });
+        gotoComments(item) {
+            this.$store.dispatch('setRouterProp', item);
+            this.$router.push({name: 'CommentList', params: {post_id: item.id}});
+        }
+    },
+    computed: {
+        total() {
+            return this.items.length;
         }
     }
 };
