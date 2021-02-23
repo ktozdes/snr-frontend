@@ -54,7 +54,7 @@ import {User} from "@/interfaces/User";
 const user = store.getters.getUser;
 
 if (user.access_token) {
-	axios.get(process.env.VUE_APP_API_URL + '/user',
+	axios.get(process.env.VUE_APP_API_URL + '/user/get',
 	{
 		headers: {
 			Authorization: 'Bearer ' + user.access_token,

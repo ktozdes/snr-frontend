@@ -4,10 +4,10 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>business</md-icon>
+                        <md-icon>account_box</md-icon>
                     </div>
-                    <h4 class="title">{{ 'Roles' | translate }}</h4>
-                    <router-link v-if="canDo('Organization', 'can_create')" :to="{path: 'organization/create/'}">
+                    <h4 class="title">{{ 'Users' | translate }}</h4>
+                    <router-link v-if="canDo('User', 'can_create')" :to="{path: 'user/create/'}">
                         <div class="card-icon card-icon-right">
                             <md-icon>add</md-icon>
                         </div>
@@ -18,25 +18,27 @@
                         <md-table-row>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Name' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Address' | translate }}</md-table-head>
                             <md-table-head>{{ 'Phone' | translate }}</md-table-head>
                             <md-table-head>{{ 'Email' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Organization' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Role' | translate }}</md-table-head>
                             <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
                             <md-table-cell>{{ item.id }}</md-table-cell>
                             <md-table-cell>{{ item.name }}</md-table-cell>
-                            <md-table-cell>{{ item.address }}</md-table-cell>
                             <md-table-cell>{{ item.phone }}</md-table-cell>
                             <md-table-cell>{{ item.email }}</md-table-cell>
+                            <md-table-cell>{{ item.organization ? item.organization.name : '' }}</md-table-cell>
+                            <md-table-cell>{{ item.user_role.name }}</md-table-cell>
                             <md-table-cell class="md-text-align-right">
-                                <md-button v-if="canDo('Organization', 'can_edit')"
-                                           :to="{path: 'organization/edit/' + item.id}"
+                                <md-button v-if="canDo('User', 'can_edit')"
+                                           :to="{path: 'user/edit/' + item.id}"
                                            class="md-just-icon md-success">
                                     <md-icon>edit</md-icon>
                                 </md-button>
-                                <md-button v-if="canDo('Organization', 'can_delete')" class="md-just-icon md-danger"
+                                <md-button v-if="canDo('User', 'can_delete')" class="md-just-icon md-danger"
                                            @click="destroy(item.id)">
                                     <md-icon>delete</md-icon>
                                 </md-button>
@@ -67,14 +69,14 @@ export default {
         };
     },
     created() {
-        this.getOrganizations();
+        this.getUsers();
     },
     methods: {
         paginate() {
-            this.getOrganizations();
+            this.getUsers();
         },
-        getOrganizations() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/organization', {
+        getUsers() {
+            this.axios.get(process.env.VUE_APP_API_URL + '/user', {
                 params: {page: this.currentPage}
             })
                 .then(response => {
@@ -87,7 +89,7 @@ export default {
         },
         destroy(id) {
             Swal.fire({
-                title: this.$options.filters.translate("Delete Organization?"),
+                title: this.$options.filters.translate("Delete User?"),
                 text: this.$options.filters.translate("Do you really want to delete?"),
                 type: "warning",
                 showCancelButton: true,
@@ -98,10 +100,10 @@ export default {
                 buttonsStyling: false
             }).then(result => {
                 if (result.value) {
-                    this.axios.delete(process.env.VUE_APP_API_URL + '/organization/destroy/' + id)
+                    this.axios.delete(process.env.VUE_APP_API_URL + '/user/destroy/' + id)
                         .then(response => {
                             if (response.status === 200) {
-                                this.getOrganizations();
+                                this.getUsers();
                             }
                         })
                         .catch(error => {

@@ -52,6 +52,10 @@ export default {
                         if (error.response.data?.message) {
                             this.showFlashMessages({'error_message': [error.response.data.message]});
                         }
+                    }  else if (error.response.status === 403) {
+                        if (error.response.data?.message) {
+                            this.showFlashMessages({'error_message': [error.response.data.message]});
+                        }
                     } else {
                         //return Promise.reject(error);
                     }

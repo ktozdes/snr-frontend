@@ -24,6 +24,9 @@
                 <sidebar-item v-if="canDo('Organization', 'can_view')"
                     :link="{ name: 'Organization', icon: 'business', path: '/organization' }"
                 ></sidebar-item>
+                <sidebar-item v-if="canDo('User', 'can_view')"
+                    :link="{ name: 'User', icon: 'account_box', path: '/user' }"
+                ></sidebar-item>
                 <sidebar-item  v-if="canDo('Post', 'can_view')"
                     :link="{ name: 'Post', icon: 'article', path: '/post' }"
                 ></sidebar-item>

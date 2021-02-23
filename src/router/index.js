@@ -29,6 +29,9 @@ import RoleEditor from "@/modules/Role/RoleEditor";
 import OrganizationList from "@/modules/Organization/OrganizationList";
 import OrganizationEditor from "@/modules/Organization/OrganizationEditor";
 
+import UserList from "@/modules/User/UserList";
+import UserEditor from "@/modules/User/UserEditor";
+
 import PostList from "@/modules/Post/PostList";
 import PostEditor from "@/modules/Post/PostEditor";
 
@@ -152,6 +155,30 @@ let dashboardPages = {
 			path: "organization/create/",
 			name: "OrganizationCreate",
 			components: {default: OrganizationEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "user",
+			name: "UserList",
+			components: {default: UserList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "user/edit/:id",
+			name: "UserEdit",
+			components: {default: UserEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "user/create/",
+			name: "UserCreate",
+			components: {default: UserEditor},
 			meta: {
 				middleware: ['auth']
 			},
