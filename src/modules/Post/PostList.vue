@@ -22,7 +22,7 @@
                         <md-table-row v-for="(item, index) in items" :key="index">
                             <md-table-cell>{{ item.id }}</md-table-cell>
                             <md-table-cell>
-                                <a v-if="canDo('Comment', 'can_view')" @click="gotoComments(item)"
+                                <a v-if="canDo('Comment', 'can_view')" @click="showPost(item)"
                                    class="md-link primary" href="javascript:void(0)">{{ item.code }}
                                 </a>
                                 <span v-else>
@@ -83,9 +83,9 @@ export default {
         getThumbnail($fileName) {
             return process.env.VUE_APP_API_URL + "/image/proxy/" + $fileName;
         },
-        gotoComments(item) {
+        showPost(item) {
             this.$store.dispatch('setRouterProp', item);
-            this.$router.push({name: 'CommentList', params: {post_id: item.id}});
+            this.$router.push({name: 'PostShow', params: {id: item.id}});
         }
     },
     computed: {

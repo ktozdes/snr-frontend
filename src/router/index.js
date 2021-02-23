@@ -33,6 +33,7 @@ import UserList from "@/modules/User/UserList";
 import UserEditor from "@/modules/User/UserEditor";
 
 import PostList from "@/modules/Post/PostList";
+import PostShow from "@/modules/Post/PostShow";
 import PostEditor from "@/modules/Post/PostEditor";
 
 import CommentList from "@/modules/Comment/CommentList";
@@ -192,8 +193,16 @@ let dashboardPages = {
 			},
 		},
 		{
+			path: "post/show/:id",
+			name: "PostShow",
+			components: {default: PostShow},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
 			path: "post/edit/:id",
-			name: "PostEdit",
+			name: "PostEditor",
 			components: {default: PostEditor},
 			meta: {
 				middleware: ['auth']

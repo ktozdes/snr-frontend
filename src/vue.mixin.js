@@ -23,6 +23,18 @@ Vue.mixin({
 					});
 				});
 			}
+			if (params?.warning_message) {
+				params.warning_message.forEach(message => {
+					this.$notify({
+						timeout: 5000,
+						message: message,
+						icon: "add_warning",
+						horizontalAlign: 'top',
+						verticalAlign: 'left',
+						type: 'warning'
+					});
+				});
+			}
 			else if (params?.error_message) {
 				params.error_message.forEach(message => {
 					this.$notify({

@@ -36,6 +36,11 @@ export default {
             });
             this.axios.interceptors.response.use((response) => {
                     if (response.status === 200 && response.data) {
+                        if (response.data?.success_message || response.data?.error_message || response.data?.warning_message) {
+                            this.showFlashMessages(response.data);
+                        }
+                    }
+                    if (response.status === 204 && response.data) {
                         if (response.data?.success_message || response.data?.error_message) {
                             this.showFlashMessages(response.data);
                         }

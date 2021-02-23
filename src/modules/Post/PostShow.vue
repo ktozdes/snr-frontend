@@ -112,7 +112,6 @@ export default {
         getComments() {
             this.axios.get(process.env.VUE_APP_API_URL + '/comment/' + this.post.id)
                 .then(response => {
-                    console.log(response);
                     this.items = response.data.items;
                 })
                 .catch(error => {
@@ -121,7 +120,8 @@ export default {
         },
         selectWords(item) {
             this.$store.dispatch('setRouterProp', item);
-            this.$router.push({name: 'WordSelector'});
+            this.$router.push({name: 'CommentEditor', params: {id: item.id}});
+            //this.$router.push({name: 'CommentEditor'});
         },
         getThumbnail() {
             return process.env.VUE_APP_API_URL + "/image/proxy/" + this.post.thumbnail;

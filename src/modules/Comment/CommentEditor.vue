@@ -4,115 +4,176 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>{{ role.id ? 'edit' : 'add' }}</md-icon>
-                        <md-icon>add_task</md-icon>
+                        <md-icon>font_download</md-icon>
                     </div>
-                    <h4 class="title">{{ (role.id ? 'Edit role' : 'Create role') | translate }}</h4>
+                    <h4 class="title">{{ 'Select words' | translate }}</h4>
                 </md-card-header>
-                <md-card-content>
-                    <md-card-content>
-                        <md-field :class="{'md-invalid' : !nameIsValid}">
-                            <label>{{ 'Role' | translate }}</label>
-                            <md-input v-model="role.name" type="text" required></md-input>
-                            <span class="md-error" v-if="!role.name">{{ 'This field is required.' | translate }}</span>
-                            <span v-for="(error, key) in validationError.name"
-                              :key="key"
-                              class="md-error">{{ error }}</span>
-                        </md-field>
-                    </md-card-content>
-                    <div v-if="role.permissions">
-                        <md-table>
-                            <md-table-row>
-                                <md-table-head md-numeric>{{ 'Permission' | translate }}</md-table-head>
-                                <md-table-head>{{ 'View' | translate }}</md-table-head>
-                                <md-table-head>{{ 'Create' | translate }}</md-table-head>
-                                <md-table-head>{{ 'Edit' | translate }}</md-table-head>
-                                <md-table-head>{{ 'Delete' | translate }}</md-table-head>
-                            </md-table-row>
+                <md-card-content v-if="comment && comment.content">
+                    <md-table table-header-color="green">
+                        <md-table-row>
+                            <md-table-cell>
+                                <md-field>
+                                    <label class="md-red-text">{{ 'Selected word' | translate }}:</label>
+                                    <md-input type="text" v-model="tempWord.word"></md-input>
+                                </md-field>
+                            </md-table-cell>
+                            <md-table-cell class="text-center">
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': tempWord.type === 1}"
+                                           @click="setReaction('positive')">
+                                    <md-icon>thumb_up</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': tempWord.type === 0}"
+                                           @click="setReaction('neutral')">
+                                    <md-icon>thumbs_up_down</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': tempWord.type === -1}"
+                                           @click="setReaction('negative')">
+                                    <md-icon>thumb_down</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                            <md-table-cell class="md-text-align-right">
+                                <md-button class="md-just-icon md-simple md-primary" @click="saveTempWord()">
+                                    <md-icon>check</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-simple md-danger" @click="resetTempWord()">
+                                    <md-icon>close</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                        </md-table-row>
+                    </md-table>
 
-                            <md-table-row v-for="(permission, index) in role.permissions" :key="index">
-                                <md-table-head md-numeric>{{index | translate}}</md-table-head>
-                                <md-table-cell>
-                                    <md-checkbox v-model="role.permissions[index]['can_view']">{{ 'View' | translate}}</md-checkbox>
-                                </md-table-cell>
-                                <md-table-cell>
-                                    <md-checkbox v-model="role.permissions[index]['can_create']">{{ 'Create' | translate }}</md-checkbox>
-                                </md-table-cell>
-                                <md-table-cell>
-                                    <md-checkbox v-model="role.permissions[index]['can_edit']">{{ 'Edit' | translate }}</md-checkbox>
-                                </md-table-cell>
-                                <md-table-cell>
-                                    <md-checkbox v-model="role.permissions[index]['can_delete']">{{ 'Delete' | translate }} </md-checkbox>
-                                </md-table-cell>
-                            </md-table-row>
-                        </md-table>
-                    </div>
 
+                    <p ref="target">{{ comment.content }}</p>
+
+                    <md-table table-header-color="green">
+                        <md-table-row>
+                            <md-table-head>{{ 'Word' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Reaction' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Action' | translate }}</md-table-head>
+                        </md-table-row>
+
+                        <md-table-row v-for="(item, index) in words" :key="index">
+                            <md-table-cell>{{ item.word }}</md-table-cell>
+                            <md-table-cell>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': item.type === 1}"
+                                           @click="setReaction(item, 'positive')">
+                                    <md-icon>thumb_up</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': item.type === 0}"
+                                           @click="setReaction(item, 'neutral')">
+                                    <md-icon>thumbs_up_down</md-icon>
+                                </md-button>
+                                <md-button class="md-just-icon md-round"
+                                           :class="{'md-info': item.type === -1}"
+                                           @click="setReaction(item, 'negative')">
+                                    <md-icon>thumb_down</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                            <md-table-cell style="width:300px;text-align: center">
+                                <md-button class="md-just-icon md-danger" @click="removeWord(index)">
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                        </md-table-row>
+                    </md-table>
 
                     <md-card-actions md-alignment="left">
-                        <md-button class="md-success" @click="submit">{{ (role.id ? 'Edit' : 'Create') | translate }}
+                        <md-button class="md-success" @click="submit">
+                            {{ 'Submit' | translate }}
                         </md-button>
                     </md-card-actions>
+                </md-card-content>
+                <md-card-content v-else>
+                    <h3>{{ 'No comment selected' | translate }}</h3>
                 </md-card-content>
             </md-card>
         </div>
     </div>
 </template>
 <script>
-import {Role} from "@/interfaces/Role";
+import {Word} from '@/interfaces/Word';
 
 export default {
     data() {
         return {
-            role: new Role(),
+            comment: this.$store.getters.getRouterProp,
+            words: [],
+            tempWord: new Word({
+                word: ''
+            }),
             validationError: [],
         };
     },
-    created() {
-        if (this.$route.params?.id) {
-            this.role.id = this.$route.params?.id;
+    mounted() {
+        document.addEventListener('mouseup', event => {
+            if (event.target === this.$refs.target || event.target.contains(this.$refs.target)) {
+                this.pushText();
+            }
+        });
+        if (this.$route?.params?.id) {
+            this.comment.id = this.$route.params.id;
         }
-        this.getRolePermissions();
     },
     methods: {
-        getRolePermissions() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/permission' + (this.role.id ? '/' + this.role.id : ''))
-                .then(response => {
-                    this.role = new Role(response.data.role);
-                    this.role.permissions = response.data.items;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
         submit() {
-            const url = process.env.VUE_APP_API_URL + ((this.role.id) ? '/role/update/'+ this.role.id : '/role/store');
-            this.axios.post(url, this.role)
-                .then(response => {
-                    if (response.status === 200) {
-                        this.$router.push({ name: 'RoleList' });
-                    }
-                })
-                .catch(error => {
-                    if (error.response.status === 422) {
-                        this.validationError = error.response.data.errors;
-                    }
-                });
-        }
+            if (this.words.length > 0) {
+                console.log(this.comment, this.words);
+                const url = process.env.VUE_APP_API_URL + '/word/mass-store/'+this.comment.id;
+                this.axios.post(url, {words: this.words})
+                    .then(response => {
+                        this.resetAll();
+                    })
+                    .catch(error => {
+                    });
+            }
+
+        },
+        setReaction(reaction) {
+            if (reaction === 'positive') {
+                this.tempWord.type = 1;
+            } else if (reaction === 'neutral') {
+                this.tempWord.type = 0;
+            } else if (reaction === 'negative') {
+                this.tempWord.type = -1;
+            }
+        },
+        saveTempWord() {
+            if (this.tempWord.word.trim() !== '') {
+                this.words.push(this.tempWord);
+                this.resetTempWord();
+            }
+        },
+        resetTempWord() {
+            this.tempWord = new Word({
+                word: ''
+            })
+        },
+        resetAll() {
+            this.words = [];
+            this.resetTempWord();
+        },
+        removeWord(deletingIndex) {
+            this.words.splice(deletingIndex, 1);
+        },
+        pushText() {
+            let tempString = window.getSelection().toString().trim();
+            if (tempString.length > 0 && tempString !== '') {
+                this.tempWord.word = tempString;
+                this.tempWord.index = window.getSelection().baseOffset;
+
+            }
+        },
     },
-    computed: {
-        nameIsValid() {
-            let valid = true;
-            if (!this.role.name) {
-                valid = false;
-            }
-            if (this.validationError.name) {
-                valid = false;
-            }
-            return valid;
-        }
-    }
+    computed: {}
 };
 </script>
 <style scoped>
+.reaction-button {
+    height: 50px;
+}
 </style>
