@@ -26,9 +26,6 @@
                 <md-button slot="footer" class="md-simple md-success md-lg" @click="login">
                     Lets Go
                 </md-button>
-<!--                <md-button slot="footer" class="md-simple md-success md-lg" @click="testApi">-->
-<!--                    test close-->
-<!--                </md-button>-->
             </login-card>
         </div>
     </div>
@@ -60,6 +57,7 @@ export default {
                         user.access_token = response.data.access_token;
                         user.is_authorized = true;
                         this.$store.dispatch('login', user);
+                        this.$store.dispatch('setOrganization', response.data.organization);
                         this.$store.dispatch('setPermissions', response.data.permissions);
                         this.$router.push("dashboard");
                     }
@@ -79,15 +77,6 @@ export default {
                     }
                 });
         },
-        testApi() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/test-close')
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error)
-            });
-        }
     }
 };
 </script>

@@ -89,7 +89,6 @@ function reinitScrollbar() {
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
-import FixedPlugin from "./FixedPlugin";
 import UserMenu from "./Extra/UserMenu.vue";
 import {ZoomCenterTransition} from "vue2-transitions";
 
@@ -97,7 +96,6 @@ export default {
     components: {
         TopNavbar,
         ContentFooter,
-        // FixedPlugin,
         MobileMenu,
         UserMenu,
         ZoomCenterTransition

@@ -104,6 +104,13 @@ export default {
             autoClose: this.autoClose
         };
     },
+    created() {
+        this.$store.subscribe( (mutation, state) => {
+            if (mutation.type === 'setOrganization') {
+                this.organization = mutation.payload;
+            }
+        });
+    },
     methods: {
         minimizeSidebar() {
             if (this.$sidebar) {
@@ -118,7 +125,6 @@ export default {
             };
         },
         logoUrl() {
-
             return (this.organization?.logo)
                 ? this.organization.logo.thumbnail_url
                 : "/img/vue-logo.png";

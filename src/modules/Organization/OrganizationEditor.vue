@@ -15,7 +15,7 @@
                     <md-card-content>
                         <div class="md-layout">
                             <div class="md-layout-item md-size-30 md-small-size-100">
-                                <h4 class="card-title">Regular Image</h4>
+                                <h4 class="card-title">{{ 'Logo' | translate}}</h4>
                                 <div class="file-input">
                                     <div v-if="!imageRegular">
                                         <div class="image-container">
@@ -154,13 +154,19 @@ export default {
         submit() {
             const url = process.env.VUE_APP_API_URL + ((this.organization.id) ? '/organization/update/' + this.organization.id : '/organization/store');
             this.organization.keywords = this.keywords;
+            delete this.organization.logo;
             this.axios.post(url, this.organization)
                 .then(response => {
                     if (response.status === 200) {
-                        //this.$router.push({name: 'OrganizationList'});
+                        let organizationID = this.$store.getters.getOrganization.id;
+                        if (organizationID === this.organization.id) {
+                            this.$store.dispatch('setOrganization', response.data.organization);
+                        }
+                        this.$router.push({name: 'OrganizationList'});
                     }
                 })
                 .catch(error => {
+                    console.log('error', error);
                     if (error.response.status === 422) {
                         this.validationError = error.response.data.errors;
                     }
@@ -179,7 +185,9 @@ export default {
             return valid;
         },
         defaultImage() {
-            return this.publicURL +"img/image_placeholder.jpg";
+            return (this.organization?.logo)
+                ? this.organization.logo.thumbnail_url
+                : this.publicURL + "img/image_placeholder.jpg";
         }
     }
 };

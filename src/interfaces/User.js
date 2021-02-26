@@ -12,6 +12,7 @@ export class User extends Model {
         this.organization_id = model.organization_id || null;
         this.is_authorized = model.is_authorized || null;
         this.permissions = model.permissions || [];
+        this.logo = model.logo || [];
 
     }
     reset(payload) {

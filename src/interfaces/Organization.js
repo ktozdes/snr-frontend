@@ -8,6 +8,7 @@ export class Organization extends Model {
 		this.phone = model.phone || null;
 		this.address = model.address || null;
 		this.keywords = model.keywords || [];
+		this.logo = model.logo || [];
     }
     reset(payload) {
 		super.reset(payload);

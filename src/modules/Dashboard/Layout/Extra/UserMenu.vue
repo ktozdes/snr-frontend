@@ -25,6 +25,11 @@ export default {
         };
     },
     created() {
+        this.$store.subscribe( (mutation, state) => {
+            if (mutation.type === 'login') {
+                this.user = mutation.payload;
+            }
+        });
     },
     methods: {
         clicked: function (e) {
