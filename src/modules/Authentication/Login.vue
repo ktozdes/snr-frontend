@@ -61,7 +61,7 @@ export default {
                         user.is_authorized = true;
                         this.$store.dispatch('login', user);
                         this.$store.dispatch('setPermissions', response.data.permissions);
-                        this.$router.push("regular-table");
+                        this.$router.push("dashboard");
                     }
                 })
                 .catch(error => {

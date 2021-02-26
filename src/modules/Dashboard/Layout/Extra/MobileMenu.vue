@@ -1,58 +1,56 @@
 <template>
-  <ul class="nav nav-mobile-menu">
-    <li>
-      <md-field>
-        <label>Search</label>
-        <md-input v-model="search" type="text"></md-input>
-      </md-field>
-    </li>
-    <li>
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="material-icons">dashboard</i>
-        <p>Stats</p></a
-      >
-    </li>
-    <li>
-      <drop-down>
-        <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
-          <i class="material-icons">notifications</i>
-          <span class="notification">5</span>
-          <p>Some Actions</p>
+    <ul class="nav nav-mobile-menu">
+        <a
+            class="toggle-link"
+            data-toggle="collapse"
+            :aria-expanded="!isClosed"
+            @click.stop="toggleMenu"
+            @click.capture="clicked"
+        >
+        <span>
+          Profile
+          <b class="caret"></b>
+        </span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li><a href="#">Mike John responded to your email</a></li>
-          <li><a href="#">You have 5 new tasks</a></li>
-          <li><a href="#">You're now friend with Andrew</a></li>
-          <li><a href="#">Another Notification</a></li>
-          <li><a href="#">Another One</a></li>
-        </ul>
-      </drop-down>
-    </li>
-    <li>
-      <a href="#" data-toggle="dropdown" class="dropdown-toggle"
-        ><i class="material-icons">person</i>
-        <p>Account</p></a
-      >
-    </li>
-  </ul>
+        <collapse-transition>
+            <div v-show="!isClosed">
+                <ul class="nav">
+                    <slot>
+                        <li>
+                            <router-link :to="{path: '/user/edit/' + user.id}">
+                                <span class="sidebar-normal">{{ 'Edit Profile' | translate }}</span>
+                            </router-link>
+                        </li>
+                        <li><a href="javascript:void(0)" @click="logout">Logout</a></li>
+                    </slot>
+                </ul>
+            </div>
+        </collapse-transition>
+    </ul>
 </template>
-<script>
+<script>import {CollapseTransition} from "vue2-transitions";
+
 export default {
-  data() {
-    return {
-      search: null,
-      selectedEmployee: null,
-      employees: [
-        "Jim Halpert",
-        "Dwight Schrute",
-        "Michael Scott",
-        "Pam Beesly",
-        "Angela Martin",
-        "Kelly Kapoor",
-        "Ryan Howard",
-        "Kevin Malone"
-      ]
-    };
-  }
+    components: {
+        CollapseTransition
+    },
+    data() {
+        return {
+            isClosed: true,
+            user: this.$store.getters.getUser,
+        };
+    },
+    methods: {
+        clicked: function (e) {
+            e.preventDefault();
+        },
+        toggleMenu: function () {
+            this.isClosed = !this.isClosed;
+        },
+        logout() {
+            this.$store.dispatch('logout');
+            this.$router.push({name: 'Login'});
+        }
+    }
 };
 </script>

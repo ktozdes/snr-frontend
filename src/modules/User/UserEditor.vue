@@ -25,7 +25,7 @@
                         </md-field>
                         <md-field :class="{'md-invalid' : validationError.email}">
                             <label>{{ 'Email' | translate }}</label>
-                            <md-input v-model="user.email" type="email" :disabled="user.id"></md-input>
+                            <md-input v-model="user.email" type="email" :disabled="user.id ? true : false"></md-input>
                             <span v-for="(error, key) in validationError.email"
                                   :key="key"
                                   class="md-error">{{ error }}</span>

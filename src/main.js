@@ -65,6 +65,7 @@ if (user.access_token) {
 		tempUser.access_token = user.access_token;
 		tempUser.is_authorized = true;
 		store.dispatch('login', tempUser);
+		store.dispatch('setOrganization', response.data.organization);
 		store.dispatch('setPermissions', response.data.permissions);
 		startVue();
 	})

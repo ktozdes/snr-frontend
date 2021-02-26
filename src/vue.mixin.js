@@ -67,6 +67,9 @@ Vue.mixin({
 		mixinMessage() {
 			return 'mixinMessage';
 		},
+		publicURL() {
+			return process.env.VUE_APP_PUBLIC_URL;
+		},
 	}
 
 });

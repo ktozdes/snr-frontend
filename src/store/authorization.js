@@ -6,7 +6,8 @@ export default {
 		user: new User({
 			access_token : localStorage.getItem('access_token')
 		}),
-		permissions: []
+		permissions: [],
+		organization:[]
 	},
 	getters: {
 		getUser(state) {
@@ -14,6 +15,9 @@ export default {
 		},
 		getPermissions(state) {
 			return state.permissions;
+		},
+		getOrganization(state) {
+			return state.organization;
 		}
 	},
 	actions: {
@@ -30,6 +34,9 @@ export default {
 		setPermissions(state, permissions) {
 			state.commit('setPermissions', permissions);
 		},
+		setOrganization(state, organization) {
+			state.commit('setOrganization', organization);
+		},
 	},
 	mutations: {
 		login(state, user) {
@@ -43,6 +50,10 @@ export default {
 		setPermissions(state, permissions) {
 			state.permissions = permissions;
 			console.log('%c setPermissions', 'color: #3273dc', state.permissions);
+		},
+		setOrganization(state, organization) {
+			state.organization = organization;
+			console.log('%c organization', 'color: #3273dc', state.organization);
 		},
 	}
 };
