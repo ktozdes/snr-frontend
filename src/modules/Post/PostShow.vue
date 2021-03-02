@@ -11,6 +11,10 @@
                         <md-icon v-else>computer</md-icon>
                     </div>
                     <h4 class="title">{{ 'Post' | translate }}</h4>
+                    <div v-if="canDo('Word', 'can_create')" @click="setManualReaction"
+                         class="card-icon card-icon-right">
+                        <md-icon>mode_edit</md-icon>
+                    </div>
                 </md-card-header>
                 <md-card-content class="mr">
                     <div class="md-layout" v-if="post.code">
@@ -88,6 +92,7 @@
 <script>
 
 import Reaction from "@/components/Reaction";
+import Swal from "sweetalert2";
 
 export default {
     components: {
@@ -131,6 +136,45 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+        },
+        setManualReaction() {
+            Swal.fire({
+                title: this.$options.filters.translate("Assign custom rating"),
+                html: `<div class="md-field md-theme-default">
+                    <input type="text" id="custom-positive" class="md-input" placeholder="positive" ref="input1">
+                    <input type="text" id="custom-neutral" class="md-input" placeholder="neutral" ref="input2">
+                    <input type="text" id="custom-negative" class="md-input" placeholder="negative" ref="input3">
+                    </div>`,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: this.$options.filters.translate("Save"),
+                cancelButtonText: this.$options.filters.translate("Cancel"),
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+                    const positive = document.querySelector("input[id=custom-positive]").value;
+                    const neutral = document.querySelector("input[id=custom-neutral]").value;
+                    const negative = document.querySelector("input[id=custom-negative]").value;
+
+                    if (positive > 0 || neutral > 0 || negative > 0) {
+                        this.axios.post(process.env.VUE_APP_API_URL + '/post/update-stats/' + this.post.id, {
+                            positive,
+                            neutral,
+                            negative
+                        })
+                            .then(response => {
+                                if (response.status === 200) {
+                                    this.$router.push({name: 'PostList'});
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    }
+                }
+            });
         },
         selectWords(item) {
             this.$store.dispatch('setRouterProp', item);
