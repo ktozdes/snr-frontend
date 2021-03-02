@@ -6,6 +6,7 @@ export class Post extends Model {
 		this.date = model.date || null;
 		this.code = model.code || null;
 		this.thumbnail = model.thumbnail || null;
+		this.process_type = model.process_type || null;
 		this.content = model.content || null;
 		this.author_id = model.author_id || null;
 		this.author_username = model.author_username || null;

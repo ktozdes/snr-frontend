@@ -23,7 +23,7 @@
                         <md-table-row v-for="(item, index) in items" :key="index">
                             <md-table-cell>{{ item.id }}
                                 <div class="card-icon">
-                                    <md-icon v-if="item.process_type === 'auto'">perm_identity</md-icon>
+                                    <md-icon v-if="item.process_type === 'manual'">perm_identity</md-icon>
                                     <md-icon v-else>computer</md-icon>
                                 </div>
                             </md-table-cell>

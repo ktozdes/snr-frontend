@@ -6,6 +6,10 @@
                     <div class="card-icon">
                         <md-icon>font_download</md-icon>
                     </div>
+                    <div class="card-icon">
+                        <md-icon v-if="comment.process_type === 'manual'">perm_identity</md-icon>
+                        <md-icon v-else>computer</md-icon>
+                    </div>
                     <h4 class="title">{{ 'Comment words' | translate }}</h4>
                 </md-card-header>
                 <md-card-content v-if="comment && comment.content">

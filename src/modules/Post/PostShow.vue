@@ -7,7 +7,7 @@
                         <md-icon>add_task</md-icon>
                     </div>
                     <div class="card-icon">
-                        <md-icon v-if="post.process_type === 'auto'">perm_identity</md-icon>
+                        <md-icon v-if="post.process_type === 'manual'">perm_identity</md-icon>
                         <md-icon v-else>computer</md-icon>
                     </div>
                     <h4 class="title">{{ 'Post' | translate }}</h4>
