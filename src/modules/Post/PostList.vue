@@ -15,12 +15,20 @@
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Code' | translate }}</md-table-head>
                             <md-table-head>{{ 'Thumbnail' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Rating' | translate }}</md-table-head>
                             <md-table-head>{{ 'User name' | translate }}</md-table-head>
                             <md-table-head>{{ 'Date' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
-                            <md-table-cell>{{ item.id }}</md-table-cell>
+                            <md-table-cell>{{ item.id }}
+                                <div class="card-icon">
+                                    <md-icon v-if="item.process_type === 'auto'">perm_identity</md-icon>
+                                    <md-icon v-else>computer</md-icon>
+                                </div>
+                            </md-table-cell>
+                            <md-table-cell>
+                            </md-table-cell>
                             <md-table-cell>
                                 <a v-if="canDo('Comment', 'can_view')" @click="showPost(item)"
                                    class="md-link primary" href="javascript:void(0)">{{ item.code }}
@@ -35,13 +43,17 @@
                                     <img :src="getThumbnail(item.thumbnail)" :alt="'Post thumbnail' | translate "/>
                                 </div>
                             </md-table-cell>
+                            <md-table-cell>
+                                <reaction
+                                    :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
+                            </md-table-cell>
                             <md-table-cell>{{ item.author_username }}</md-table-cell>
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
                         </md-table-row>
                     </md-table>
 
-                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate" >
-                </pagination>
+                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate">
+                    </pagination>
                 </md-card-content>
             </md-card>
         </div>
@@ -49,10 +61,12 @@
 </template>
 <script>
 import {Pagination} from "@/components";
+import Reaction from "@/components/Reaction";
 
 export default {
     components: {
-        Pagination
+        Pagination,
+        Reaction
     },
     data() {
         return {

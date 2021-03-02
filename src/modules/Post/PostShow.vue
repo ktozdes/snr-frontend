@@ -6,6 +6,10 @@
                     <div class="card-icon">
                         <md-icon>add_task</md-icon>
                     </div>
+                    <div class="card-icon">
+                        <md-icon v-if="post.process_type === 'auto'">perm_identity</md-icon>
+                        <md-icon v-else>computer</md-icon>
+                    </div>
                     <h4 class="title">{{ 'Post' | translate }}</h4>
                 </md-card-header>
                 <md-card-content class="mr">
@@ -23,8 +27,11 @@
                                     <p>{{ post.author_username }}</p>
                                 </div>
                                 <div class="tim-typo">
-                                    <span class="tim-note">{{ 'Code' | translate }}</span>
-                                    <p>{{ post.code }}</p>
+                                    <span class="tim-note">{{ 'Rating' | translate }}</span>
+                                    <p>
+                                        <reaction
+                                            :reactions="{positive:post.positive ,negative:post.negative, neutral:post.neutral}"></reaction>
+                                    </p>
                                 </div>
                                 <div class="tim-typo">
                                     <span class="tim-note">{{ 'Content' | translate }}</span>
@@ -50,6 +57,7 @@
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Author' | translate }}</md-table-head>
                             <md-table-head>{{ 'Date' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Rating' | translate }}</md-table-head>
                             <md-table-head>{{ 'Content' | translate }}</md-table-head>
                             <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
@@ -59,6 +67,10 @@
                             <md-table-cell>{{ item.id }}</md-table-cell>
                             <md-table-cell>{{ item.author_username }}</md-table-cell>
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
+                            <md-table-cell>
+                                <reaction
+                                    :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
+                            </md-table-cell>
                             <md-table-cell>{{ item.content }}</md-table-cell>
                             <md-table-cell class="md-text-align-right">
                                 <md-button v-if="canDo('Word', 'can_create')" @click="selectWords(item)"
@@ -75,14 +87,16 @@
 </template>
 <script>
 
-import Swal from "sweetalert2";
-import {Post} from "@/interfaces/Post";
+import Reaction from "@/components/Reaction";
 
 export default {
+    components: {
+        Reaction
+    },
     props: {},
     data() {
         return {
-            post: this.$store.getters.getRouterProp,
+            post: null,
             items: [],
         };
     }
@@ -134,7 +148,7 @@ export default {
 ;
 </script>
 <style scoped>
-.overflow-wrap--anywhere{
-    overflow-wrap:anywhere;
+.overflow-wrap--anywhere {
+    overflow-wrap: anywhere;
 }
 </style>

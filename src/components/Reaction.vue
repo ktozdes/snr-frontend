@@ -1,5 +1,9 @@
 <template>
     <div class="reaction-container">
+        <md-button v-if="positive < 1 && negative < 1 && neutral < 1" class="warning positive" :style="'width:99%'">
+            {{ 'No rating' | translate }}
+            <md-tooltip md-direction="top">0 %</md-tooltip>
+        </md-button>
         <md-button v-show="positive > 1" class="md-success positive" :style="'width:' + positive +'%'">
             {{ reactions['positive'] }}
             <md-tooltip md-direction="top">{{ positive }} %</md-tooltip>

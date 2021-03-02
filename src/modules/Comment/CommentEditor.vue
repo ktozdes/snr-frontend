@@ -6,9 +6,16 @@
                     <div class="card-icon">
                         <md-icon>font_download</md-icon>
                     </div>
-                    <h4 class="title">{{ 'Select words' | translate }}</h4>
+                    <h4 class="title">{{ 'Comment words' | translate }}</h4>
                 </md-card-header>
                 <md-card-content v-if="comment && comment.content">
+                    <div class="tim-typo">
+                        <span class="tim-note">{{ 'Rating' | translate }}</span>
+                        <p>
+                            <reaction v-if="comment"
+                                      :reactions="{positive:comment.positive ,negative:comment.negative, neutral:comment.neutral}"></reaction>
+                        </p>
+                    </div>
                     <md-table table-header-color="green">
                         <md-table-row>
                             <md-table-cell>
@@ -55,22 +62,22 @@
                             <md-table-head>{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
-                        <md-table-row v-for="(item, index) in words" :key="index">
+                        <md-table-row v-for="(item, index) in comment.words" :key="index">
                             <md-table-cell>{{ item.word }}</md-table-cell>
                             <md-table-cell>
                                 <md-button class="md-just-icon md-round"
                                            :class="{'md-info': item.type === 1}"
-                                           @click="setReaction(item, 'positive')">
+                                           @click="setItemReaction(item, 'positive')">
                                     <md-icon>thumb_up</md-icon>
                                 </md-button>
                                 <md-button class="md-just-icon md-round"
                                            :class="{'md-info': item.type === 0}"
-                                           @click="setReaction(item, 'neutral')">
+                                           @click="setItemReaction(item, 'neutral')">
                                     <md-icon>thumbs_up_down</md-icon>
                                 </md-button>
                                 <md-button class="md-just-icon md-round"
                                            :class="{'md-info': item.type === -1}"
-                                           @click="setReaction(item, 'negative')">
+                                           @click="setItemReaction(item, 'negative')">
                                     <md-icon>thumb_down</md-icon>
                                 </md-button>
                             </md-table-cell>
@@ -97,12 +104,15 @@
 </template>
 <script>
 import {Word} from '@/interfaces/Word';
+import Reaction from "@/components/Reaction";
 
 export default {
+    components: {
+        Reaction
+    },
     data() {
         return {
             comment: this.$store.getters.getRouterProp,
-            words: [],
             tempWord: new Word({
                 word: ''
             }),
@@ -115,16 +125,31 @@ export default {
                 this.pushText();
             }
         });
-        if (this.$route?.params?.id) {
-            this.comment.id = this.$route.params.id;
+        if (!this.comment && this.$route?.params?.id) {
+            this.comment = {id: this.$route.params.id};
+        }
+        if (!this.comment.code) {
+            this.getComment();
         }
     },
     methods: {
+        getComment() {
+            this.axios.get(process.env.VUE_APP_API_URL + '/comment/show/' + this.comment.id)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data?.comment) {
+                        this.comment = response.data.comment;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
         submit() {
-            if (this.words.length > 0) {
-                console.log(this.comment, this.words);
-                const url = process.env.VUE_APP_API_URL + '/word/mass-store/'+this.comment.id;
-                this.axios.post(url, {words: this.words})
+            if (this.comment.words.length > 0) {
+                console.log(this.comment, this.comment.words);
+                const url = process.env.VUE_APP_API_URL + '/word/mass-store/' + this.comment.id;
+                this.axios.post(url, {words: this.comment.words})
                     .then(response => {
                         this.resetAll();
                     })
@@ -142,9 +167,18 @@ export default {
                 this.tempWord.type = -1;
             }
         },
+        setItemReaction(item, reaction) {
+            if (reaction === 'positive') {
+                item.type = 1;
+            } else if (reaction === 'neutral') {
+                item.type = 0;
+            } else if (reaction === 'negative') {
+                item.type = -1;
+            }
+        },
         saveTempWord() {
             if (this.tempWord.word.trim() !== '') {
-                this.words.push(this.tempWord);
+                this.comment.words.push(this.tempWord);
                 this.resetTempWord();
             }
         },
@@ -154,11 +188,10 @@ export default {
             })
         },
         resetAll() {
-            this.words = [];
             this.resetTempWord();
         },
         removeWord(deletingIndex) {
-            this.words.splice(deletingIndex, 1);
+            this.comment.words.splice(deletingIndex, 1);
         },
         pushText() {
             let tempString = window.getSelection().toString().trim();
