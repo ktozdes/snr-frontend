@@ -194,7 +194,7 @@ export default {
                             user.logo = response.data.user.logo;
                             this.$store.dispatch('login', user);
                         }
-                        this.$router.push({name: 'UserList'});
+                        this.$router.push({name: 'Dashboard'});
                     }
                 })
                 .catch(error => {
