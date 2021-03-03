@@ -6,11 +6,16 @@
                     <div class="card-icon">
                         <md-icon>font_download</md-icon>
                     </div>
-                    <div class="card-icon">
+                    <div class="card-icon" v-if="comment">
                         <md-icon v-if="comment.process_type === 'manual'">perm_identity</md-icon>
                         <md-icon v-else>computer</md-icon>
                     </div>
                     <h4 class="title">{{ 'Comment words' | translate }}</h4>
+
+                    <div v-if="canDo('Word', 'can_create')" @click="setManualReaction"
+                         class="card-icon card-icon-right">
+                        <md-icon>mode_edit</md-icon>
+                    </div>
                 </md-card-header>
                 <md-card-content v-if="comment && comment.content">
                     <div class="tim-typo">
@@ -109,6 +114,7 @@
 <script>
 import {Word} from '@/interfaces/Word';
 import Reaction from "@/components/Reaction";
+import Swal from "sweetalert2";
 
 export default {
     components: {
@@ -116,7 +122,7 @@ export default {
     },
     data() {
         return {
-            comment: this.$store.getters.getRouterProp,
+            comment: null,
             tempWord: new Word({
                 word: ''
             }),
@@ -140,7 +146,7 @@ export default {
         getComment() {
             this.axios.get(process.env.VUE_APP_API_URL + '/comment/show/' + this.comment.id)
                 .then(response => {
-                    console.log(response.data);
+                    console.log('commentshow:', response.data);
                     if (response.data?.comment) {
                         this.comment = response.data.comment;
                     }
@@ -156,6 +162,7 @@ export default {
                 this.axios.post(url, {words: this.comment.words})
                     .then(response => {
                         this.resetAll();
+                        this.getComment();
                     })
                     .catch(error => {
                     });
@@ -204,6 +211,44 @@ export default {
                 this.tempWord.index = window.getSelection().baseOffset;
 
             }
+        },
+        setManualReaction() {
+            Swal.fire({
+                title: this.$options.filters.translate("Assign custom rating"),
+                html: `<div class="md-field md-theme-default">
+                    <input type="text" id="custom-positive" class="md-input" placeholder="positive" ref="input1">
+                    <input type="text" id="custom-neutral" class="md-input" placeholder="neutral" ref="input2">
+                    <input type="text" id="custom-negative" class="md-input" placeholder="negative" ref="input3">
+                    </div>`,
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: this.$options.filters.translate("Save"),
+                cancelButtonText: this.$options.filters.translate("Cancel"),
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+                    const positive = document.querySelector("input[id=custom-positive]").value;
+                    const neutral = document.querySelector("input[id=custom-neutral]").value;
+                    const negative = document.querySelector("input[id=custom-negative]").value;
+
+                    if (positive > 0 || neutral > 0 || negative > 0) {
+                        this.axios.post(process.env.VUE_APP_API_URL + '/comment/update-stats/' + this.comment.id, {
+                            positive,
+                            neutral,
+                            negative
+                        })
+                            .then(response => {
+                                if (response.status === 200) {
+                                    this.getComment();
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    }
+                }
+            });
         },
     },
     computed: {}

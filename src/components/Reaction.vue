@@ -4,15 +4,15 @@
             {{ 'No rating' | translate }}
             <md-tooltip md-direction="top">0 %</md-tooltip>
         </md-button>
-        <md-button v-show="positive > 1" class="md-success positive" :style="'width:' + positive +'%'">
+        <md-button v-show="positive > 1" class="md-success positive" :style="'width:' + (positive - 1) +'%'">
             {{ reactions['positive'] }}
             <md-tooltip md-direction="top">{{ positive }} %</md-tooltip>
         </md-button>
-        <md-button v-show="neutral > 1" class="md-default neutral" :style="'width:' + neutral +'%'">
+        <md-button v-show="neutral > 1" class="md-default neutral" :style="'width:' + (neutral - 1) +'%'">
             {{ reactions['neutral'] }}
             <md-tooltip md-direction="top">{{ neutral }} %</md-tooltip>
         </md-button>
-        <md-button v-show="negative > 1" class="md-danger negative" :style="'width:' + negative +'%'">
+        <md-button v-show="negative > 1" class="md-danger negative" :style="'width:' + (negative - 1) +'%'">
             {{ reactions['negative'] }}
             <md-tooltip md-direction="top">{{ negative }} %</md-tooltip>
         </md-button>

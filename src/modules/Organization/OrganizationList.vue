@@ -6,7 +6,7 @@
                     <div class="card-icon">
                         <md-icon>business</md-icon>
                     </div>
-                    <h4 class="title">{{ 'Roles' | translate }}</h4>
+                    <h4 class="title">{{ 'Organizations' | translate }}</h4>
                     <router-link v-if="canDo('Organization', 'can_create')" :to="{path: 'organization/create/'}">
                         <div class="card-icon card-icon-right">
                             <md-icon>add</md-icon>
@@ -21,7 +21,9 @@
                             <md-table-head>{{ 'Logo' | translate }}</md-table-head>
                             <md-table-head>{{ 'Phone' | translate }}</md-table-head>
                             <md-table-head>{{ 'Email' | translate }}</md-table-head>
-                            <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                            <md-table-head
+                                v-if="canDo('Organization', 'can_edit') || canDo('Organization', 'can_delete')"
+                                class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">

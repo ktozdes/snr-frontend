@@ -22,7 +22,9 @@
                             <md-table-head>{{ 'Email' | translate }}</md-table-head>
                             <md-table-head>{{ 'Organization' | translate }}</md-table-head>
                             <md-table-head>{{ 'Role' | translate }}</md-table-head>
-                            <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                            <md-table-head
+                                v-if="canDo('User', 'can_edit') || canDo('User', 'can_delete')"
+                                class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">

@@ -10,7 +10,30 @@
                 </md-card-header>
                 <md-card-content>
 
-                    <md-table v-model="items" table-header-color="green">
+                    <md-table table-header-color="green">
+                        <md-table-toolbar>
+                            <div class="md-layout">
+                                <div class="md-layout-item md-size-50 md-small-size-100">
+                                    <md-field>
+                                        <label for="keywords">{{ 'Keyword' | translate }}</label>
+                                        <md-select v-model="keywords" id="keywords" multiple>
+                                            <md-option
+                                                v-for="(item, index) in organizationKeywords"
+                                                :key="index"
+                                                :value="item.name"
+                                            >
+                                                {{ item.name }}
+                                            </md-option>
+                                        </md-select>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-50 md-small-size-100">
+                                    <md-field class="justify-content--flex-end">
+                                        <md-button @click="filterByKeyWord">{{ 'Filter' | translate }}</md-button>
+                                    </md-field>
+                                </div>
+                            </div>
+                        </md-table-toolbar>
                         <md-table-row>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Code' | translate }}</md-table-head>
@@ -26,8 +49,6 @@
                                     <md-icon v-if="item.process_type === 'manual'">perm_identity</md-icon>
                                     <md-icon v-else>computer</md-icon>
                                 </div>
-                            </md-table-cell>
-                            <md-table-cell>
                             </md-table-cell>
                             <md-table-cell>
                                 <a v-if="canDo('Comment', 'can_view')" @click="showPost(item)"
@@ -73,6 +94,8 @@ export default {
             items: [],
             currentPage: 1,
             pageCount: 0,
+            organizationKeywords: this.$store.getters.getOrganization?.keywords ?? [],
+            keywords: []
         };
     },
     created() {
@@ -82,9 +105,13 @@ export default {
         paginate() {
             this.getItems();
         },
+        filterByKeyWord() {
+            this.currentPage = 1;
+            this.getItems();
+        },
         getItems() {
             this.axios.get(process.env.VUE_APP_API_URL + '/post', {
-                params: {page: this.currentPage}
+                params: {page: this.currentPage, keywords: this.keywords}
             })
                 .then(response => {
                     this.items = response.data.items;

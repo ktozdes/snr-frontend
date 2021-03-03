@@ -18,7 +18,10 @@
                         <md-table-row>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Name' | translate }}</md-table-head>
-                            <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                            <md-table-head
+                                v-if="canDo('User Role', 'can_edit') || canDo('User Role', 'can_delete')"
+                                class="md-text-align-right">{{ 'Action' | translate }}
+                            </md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
@@ -37,7 +40,7 @@
                         </md-table-row>
                     </md-table>
                 </md-card-content>
-                <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate" >
+                <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate">
                 </pagination>
             </md-card>
         </div>

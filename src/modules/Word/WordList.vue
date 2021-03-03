@@ -20,7 +20,9 @@
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Word' | translate }}</md-table-head>
                             <md-table-head>{{ 'Reaction' | translate }}</md-table-head>
-                            <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                            <md-table-head
+                                v-if="canDo('Word', 'can_delete')"
+                                class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">

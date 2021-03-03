@@ -4,9 +4,6 @@
       <nav>
         <ul>
           <li>
-            <a href="#">Creative ME</a>
-          </li>
-          <li>
             <a href="#">
               About Us
             </a>

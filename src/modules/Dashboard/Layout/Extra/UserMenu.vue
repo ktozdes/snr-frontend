@@ -45,7 +45,7 @@ export default {
     },
     computed: {
         avatar() {
-            return (this.user?.logo)
+            return (this.user.logo?.thumbnail_url)
                 ? this.user.logo.thumbnail_url
                 : "/img/faces/avatar.jpg";
         }

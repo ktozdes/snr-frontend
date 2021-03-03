@@ -63,12 +63,19 @@
                             <md-table-head>{{ 'Date' | translate }}</md-table-head>
                             <md-table-head>{{ 'Rating' | translate }}</md-table-head>
                             <md-table-head>{{ 'Content' | translate }}</md-table-head>
-                            <md-table-head class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                            <md-table-head
+                                v-if="canDo('Word', 'can_create')"
+                                class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index"
                                       :class="{'table-info': hasProcessed(item)}">
-                            <md-table-cell>{{ item.id }}</md-table-cell>
+                            <md-table-cell>{{ item.id }}
+                                <div class="card-icon">
+                                    <md-icon v-if="item.process_type === 'manual'">perm_identity</md-icon>
+                                    <md-icon v-else>computer</md-icon>
+                                </div>
+                            </md-table-cell>
                             <md-table-cell>{{ item.author_username }}</md-table-cell>
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
                             <md-table-cell>
