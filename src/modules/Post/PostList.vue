@@ -121,8 +121,8 @@ export default {
                     console.log(error);
                 });
         },
-        getThumbnail($fileName) {
-            return process.env.VUE_APP_API_URL + "/image/proxy/" + $fileName;
+        getThumbnail(fileName) {
+            return process.env.VUE_APP_API_UPLOADS + fileName;
         },
         showPost(item) {
             this.$store.dispatch('setRouterProp', item);
