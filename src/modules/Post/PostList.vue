@@ -10,7 +10,7 @@
                 </md-card-header>
                 <md-card-content>
 
-                    <md-table table-header-color="green">
+                    <md-table table-header-color="green" class="post-list-table">
                         <md-table-toolbar>
                             <div class="md-layout">
                                 <div class="md-layout-item md-size-50 md-small-size-100">
@@ -35,34 +35,39 @@
                             </div>
                         </md-table-toolbar>
                         <md-table-row>
-                            <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Code' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Thumbnail' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Post' | translate }}</md-table-head>
                             <md-table-head>{{ 'Rating' | translate }}</md-table-head>
                             <md-table-head>{{ 'User name' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Date' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Created date' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Updated date' | translate }}</md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
-                            <md-table-cell>{{ item.id }}
-                                <div class="card-icon">
-                                    <md-icon v-if="item.process_type === 'manual'">perm_identity</md-icon>
-                                    <md-icon v-else>computer</md-icon>
-                                </div>
-                            </md-table-cell>
-                            <md-table-cell>
+                            <md-table-cell class="post-rrr">
                                 <a v-if="canDo('Comment', 'can_view')" @click="showPost(item)"
-                                   class="md-link primary" href="javascript:void(0)">{{ item.code }}
-                                </a>
-                                <span v-else>
-                                    {{ item.code }}
-                                </span>
+                                   href="javascript:void(0)">
+                                    <div class="img-container">
+                                        <img :src="getThumbnail(item.thumbnail)" :alt="'Post thumbnail' | translate "/>
+                                    </div>
+                                    <div class="post-list-item-extra">
+                                        <md-button class="md-primary">
+                                            <div class="card-icon">
+                                                <md-icon v-if="item.process_type === 'manual'" :title="'Manual' | translate ">perm_identity</md-icon>
+                                                <md-icon v-else :title="'Automatic' | translate ">computer</md-icon>
+                                            </div>
+                                        </md-button>
+                                        <small>{{ item.id }}</small>
+                                    </div>
+                                    <div class="post-list-item-extra">
+                                        <md-button class="md-primary">
+                                            <div class="card-icon">
+                                                <md-icon :title="'Comment' | translate ">comment</md-icon>
+                                            </div>
+                                        </md-button>
+                                        <small>{{ item.comments_count }}</small>
+                                    </div>
 
-                            </md-table-cell>
-                            <md-table-cell>
-                                <div class="img-container">
-                                    <img :src="getThumbnail(item.thumbnail)" :alt="'Post thumbnail' | translate "/>
-                                </div>
+                                </a>
                             </md-table-cell>
                             <md-table-cell>
                                 <reaction
@@ -70,6 +75,7 @@
                             </md-table-cell>
                             <md-table-cell>{{ item.author_username }}</md-table-cell>
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
+                            <md-table-cell>{{ item.formatted_updated_date }}</md-table-cell>
                         </md-table-row>
                     </md-table>
 
@@ -122,7 +128,10 @@ export default {
                 });
         },
         getThumbnail(fileName) {
-            return process.env.VUE_APP_API_UPLOADS + fileName;
+            if (fileName !== null) {
+                return process.env.VUE_APP_API_UPLOADS + fileName;
+            }
+            return this.publicURL + "img/image_placeholder.jpg";
         },
         showPost(item) {
             this.$store.dispatch('setRouterProp', item);

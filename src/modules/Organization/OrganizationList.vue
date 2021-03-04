@@ -16,9 +16,9 @@
                 <md-card-content>
                     <md-table v-model="items" table-header-color="green">
                         <md-table-row>
+                            <md-table-head>{{ 'Logo' | translate }}</md-table-head>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Name' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Logo' | translate }}</md-table-head>
                             <md-table-head>{{ 'Phone' | translate }}</md-table-head>
                             <md-table-head>{{ 'Email' | translate }}</md-table-head>
                             <md-table-head
@@ -27,11 +27,11 @@
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
-                            <md-table-cell>{{ item.id }}</md-table-cell>
-                            <md-table-cell>{{ item.name }}</md-table-cell>
-                            <md-table-cell>
+                            <md-table-cell class="avatar-container">
                                 <img v-if="item.logo" :src="item.logo.thumbnail_url" alt="organization logo">
                             </md-table-cell>
+                            <md-table-cell>{{ item.id }}</md-table-cell>
+                            <md-table-cell>{{ item.name }}</md-table-cell>
                             <md-table-cell>{{ item.phone }}</md-table-cell>
                             <md-table-cell>{{ item.email }}</md-table-cell>
                             <md-table-cell class="md-text-align-right">

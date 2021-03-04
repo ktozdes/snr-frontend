@@ -189,7 +189,7 @@ export default {
             //this.$router.push({name: 'CommentEditor'});
         },
         getThumbnail() {
-            return process.env.VUE_APP_API_URL + "/image/proxy/" + this.post.thumbnail;
+            return process.env.VUE_APP_API_UPLOADS + this.post.thumbnail;
         },
         hasProcessed(item) {
             return item.id % 2 === 0;
