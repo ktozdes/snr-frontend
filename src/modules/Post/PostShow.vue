@@ -4,16 +4,18 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>add_task</md-icon>
-                    </div>
-                    <div class="card-icon">
                         <md-icon v-if="post.process_type === 'manual'">perm_identity</md-icon>
                         <md-icon v-else>computer</md-icon>
                     </div>
+                    <router-link v-if="canDo('Post', 'can_edit')" :to="{path: '/post/edit/' + post.id}">
+                        <div class="card-icon">
+                            <md-icon>edit</md-icon>
+                        </div>
+                    </router-link>
                     <h4 class="title">{{ 'Post' | translate }}</h4>
                     <div v-if="canDo('Word', 'can_create')" @click="setManualReaction"
                          class="card-icon card-icon-right">
-                        <md-icon>mode_edit</md-icon>
+                        <md-icon>ballot</md-icon>
                     </div>
                 </md-card-header>
                 <md-card-content class="mr">
@@ -42,8 +44,6 @@
                                     <p class="overflow-wrap--anywhere">{{ post.content }}</p>
                                 </div>
                             </div>
-                            <h3></h3>
-
                         </div>
                     </div>
                 </md-card-content>
@@ -56,6 +56,8 @@
                     <h4 class="title">{{ 'Comments' | translate }}</h4>
                 </md-card-header>
                 <md-card-content>
+                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate">
+                    </pagination>
                     <md-table v-model="items" table-header-color="green">
                         <md-table-row>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
@@ -65,7 +67,8 @@
                             <md-table-head>{{ 'Content' | translate }}</md-table-head>
                             <md-table-head
                                 v-if="canDo('Word', 'can_create')"
-                                class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                                class="md-text-align-right">{{ 'Action' | translate }}
+                            </md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index"
@@ -91,6 +94,8 @@
                             </md-table-cell>
                         </md-table-row>
                     </md-table>
+                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate">
+                    </pagination>
                 </md-card-content>
             </md-card>
         </div>
@@ -100,9 +105,11 @@
 
 import Reaction from "@/components/Reaction";
 import Swal from "sweetalert2";
+import {Pagination} from "@/components";
 
 export default {
     components: {
+        Pagination,
         Reaction
     },
     props: {},
@@ -110,6 +117,8 @@ export default {
         return {
             post: null,
             items: [],
+            currentPage: 1,
+            pageCount: 0,
         };
     }
     ,
@@ -124,6 +133,9 @@ export default {
     }
     ,
     methods: {
+        paginate() {
+            this.getComments();
+        },
         getPost() {
             this.axios.get(process.env.VUE_APP_API_URL + '/post/show/' + this.post.id)
                 .then(response => {
@@ -136,9 +148,13 @@ export default {
                 });
         },
         getComments() {
-            this.axios.get(process.env.VUE_APP_API_URL + '/comment/' + this.post.id)
+            this.axios.get(process.env.VUE_APP_API_URL + '/comment/' + this.post.id, {
+                params: {page: this.currentPage, keywords: this.keywords}
+            })
+
                 .then(response => {
                     this.items = response.data.items;
+                    this.pageCount = response.data.pagination.page_count;
                 })
                 .catch(error => {
                     console.log(error);
@@ -192,7 +208,7 @@ export default {
             return process.env.VUE_APP_API_UPLOADS + this.post.thumbnail;
         },
         hasProcessed(item) {
-            return item.id % 2 === 0;
+            return item.process_type === 'manual';
         }
     }
 }

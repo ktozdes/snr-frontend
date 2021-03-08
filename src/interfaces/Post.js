@@ -11,6 +11,7 @@ export class Post extends Model {
 		this.author_id = model.author_id || null;
 		this.author_username = model.author_username || null;
 		this.like_count = model.like_count || null;
+		this.words = model.words || [];
     }
     reset(payload) {
 		super.reset(payload);

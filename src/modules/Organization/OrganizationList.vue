@@ -26,7 +26,7 @@
                                 class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
-                        <md-table-row v-for="(item, index) in items" :key="index">
+                        <md-table-row v-for="(item, index) in items" :key="index" :class="{'table-info': organization.id == item.id}">
                             <md-table-cell class="avatar-container">
                                 <img v-if="item.logo" :src="item.logo.thumbnail_url" alt="organization logo">
                             </md-table-cell>
@@ -68,6 +68,7 @@ export default {
             items: [],
             currentPage: 1,
             pageCount: 0,
+            organization: this.$store.getters.getOrganization,
         };
     },
     created() {

@@ -14,7 +14,7 @@
 
                     <div v-if="canDo('Word', 'can_create')" @click="setManualReaction"
                          class="card-icon card-icon-right">
-                        <md-icon>mode_edit</md-icon>
+                        <md-icon>ballot</md-icon>
                     </div>
                 </md-card-header>
                 <md-card-content v-if="comment && comment.content">
@@ -146,7 +146,6 @@ export default {
         getComment() {
             this.axios.get(process.env.VUE_APP_API_URL + '/comment/show/' + this.comment.id)
                 .then(response => {
-                    console.log('commentshow:', response.data);
                     if (response.data?.comment) {
                         this.comment = response.data.comment;
                     }

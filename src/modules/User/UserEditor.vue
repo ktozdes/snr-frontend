@@ -15,7 +15,7 @@
                     <md-card-content>
                         <div class="md-layout">
                             <div class="md-layout-item md-size-30 md-small-size-100">
-                                <h4 class="card-title">{{ 'Avatar' | translate}}</h4>
+                                <h4 class="card-title">{{ 'Avatar' | translate }}</h4>
                                 <div class="file-input">
                                     <div v-if="!imageRegular">
                                         <div class="image-container">
@@ -193,12 +193,15 @@ export default {
                         if (user.id === this.user.id) {
                             user.logo = response.data.user.logo;
                             this.$store.dispatch('login', user);
+                            if (response.data.user.organization_id) {
+                                this.$store.dispatch('setCurrentOrganization', response.data.user.organization_id);
+                            }
                         }
                         this.$router.push({name: 'Dashboard'});
                     }
                 })
                 .catch(error => {
-                    if (error.response.status === 422) {
+                    if (error.response?.status === 422) {
                         this.validationError = error.response.data.errors;
                         console.log(this.validationError);
                     }

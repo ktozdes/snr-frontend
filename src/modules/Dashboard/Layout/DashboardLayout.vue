@@ -18,17 +18,17 @@
                 <sidebar-item
                     :link="{ name: 'Dashboard', icon: 'dashboard', path: '/dashboard' }"
                 ></sidebar-item>
-                <sidebar-item v-if="canDo('User Role', 'can_view')"
-                    :link="{ name: 'Role', icon: 'add_task', path: '/role' }"
+                <sidebar-item  v-if="canDo('Post', 'can_view')"
+                    :link="{ name: 'Post', icon: 'article', path: '/post' }"
                 ></sidebar-item>
                 <sidebar-item v-if="canDo('Organization', 'can_view')"
                     :link="{ name: 'Organization', icon: 'business', path: '/organization' }"
                 ></sidebar-item>
+                <sidebar-item v-if="canDo('User Role', 'can_view')"
+                    :link="{ name: 'Role', icon: 'add_task', path: '/role' }"
+                ></sidebar-item>
                 <sidebar-item v-if="canDo('User', 'can_view')"
                     :link="{ name: 'User', icon: 'account_box', path: '/user' }"
-                ></sidebar-item>
-                <sidebar-item  v-if="canDo('Post', 'can_view')"
-                    :link="{ name: 'Post', icon: 'article', path: '/post' }"
                 ></sidebar-item>
                 <sidebar-item  v-if="canDo('Word', 'can_view')"
                     :link="{ name: 'Word', icon: 'font_download', path: '/word' }"
