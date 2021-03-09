@@ -16,7 +16,6 @@
                 <md-card-content>
                     <md-table v-model="items" table-header-color="green">
                         <md-table-row>
-                            <md-table-head>{{ 'Logo' | translate }}</md-table-head>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
                             <md-table-head>{{ 'Name' | translate }}</md-table-head>
                             <md-table-head>{{ 'Phone' | translate }}</md-table-head>
@@ -26,12 +25,16 @@
                                 class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
-                        <md-table-row v-for="(item, index) in items" :key="index" :class="{'table-info': organization.id == item.id}">
-                            <md-table-cell class="avatar-container">
-                                <img v-if="item.logo" :src="item.logo.thumbnail_url" alt="organization logo">
+                        <md-table-row v-for="(item, index) in items" :key="index" :class="{'table-info': isSelectedOrganization(item)}">
+                            <md-table-cell>
+                                {{ item.id }}
                             </md-table-cell>
-                            <md-table-cell>{{ item.id }}</md-table-cell>
-                            <md-table-cell>{{ item.name }}</md-table-cell>
+                            <md-table-cell class="avatar-table-row">
+                                <div class="avatar-container">
+                                    <img v-if="item.logo" :src="item.logo.thumbnail_url" alt="organization logo">
+                                </div>
+                                <h6>{{ item.name }}</h6>
+                            </md-table-cell>
                             <md-table-cell>{{ item.phone }}</md-table-cell>
                             <md-table-cell>{{ item.email }}</md-table-cell>
                             <md-table-cell class="md-text-align-right">
@@ -114,8 +117,14 @@ export default {
                         });
                 }
             });
+        },
+        isSelectedOrganization(item) {
+            if (this.organization?.id) {
+                return this.organization.id === item.id
+            }
+            return false;
         }
-    }
+    },
 };
 </script>
 <style scoped>

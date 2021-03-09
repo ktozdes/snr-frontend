@@ -14,17 +14,12 @@
                         <md-table-toolbar>
                             <div class="md-layout">
                                 <div class="md-layout-item md-size-50 md-small-size-100">
-                                    <md-field>
+                                    <md-field class="ssss">
                                         <label for="keywords">{{ 'Keyword' | translate }}</label>
-                                        <md-select v-model="keywords" id="keywords" multiple>
-                                            <md-option
-                                                v-for="(item, index) in organizationKeywords"
-                                                :key="index"
-                                                :value="item.name"
-                                            >
-                                                {{ item.name }}
-                                            </md-option>
-                                        </md-select>
+
+                                        <v-select v-model="keywords"
+                                                      :reduce="tt => tt.code"
+                                                      :options="keywordOptions" multiple></v-select>
                                     </md-field>
                                 </div>
                                 <div class="md-layout-item md-size-50 md-small-size-100">
@@ -141,6 +136,14 @@ export default {
     computed: {
         total() {
             return this.items.length;
+        },
+        keywordOptions() {
+            return this.organizationKeywords.map(item => {
+                return {
+                    code: item.name,
+                    label: item.name
+                }
+            })
         }
     }
 };

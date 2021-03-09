@@ -24,12 +24,18 @@
                             <md-table-head>{{ 'Role' | translate }}</md-table-head>
                             <md-table-head
                                 v-if="canDo('User', 'can_edit') || canDo('User', 'can_delete')"
-                                class="md-text-align-right">{{ 'Action' | translate }}</md-table-head>
+                                class="md-text-align-right">{{ 'Action' | translate }}
+                            </md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
                             <md-table-cell>{{ item.id }}</md-table-cell>
-                            <md-table-cell>{{ item.name }}</md-table-cell>
+                            <md-table-cell class="avatar-table-row">
+                                <div class="avatar-container">
+                                    <img v-if="item.logo" :src="item.logo.thumbnail_url" alt="organization logo">
+                                </div>
+                                <h6>{{ item.name }}</h6>
+                            </md-table-cell>
                             <md-table-cell>{{ item.phone }}</md-table-cell>
                             <md-table-cell>{{ item.email }}</md-table-cell>
                             <md-table-cell>{{ item.organization ? item.organization.name : '' }}</md-table-cell>
@@ -47,7 +53,7 @@
                             </md-table-cell>
                         </md-table-row>
                     </md-table>
-                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate" >
+                    <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate">
                     </pagination>
                 </md-card-content>
             </md-card>

@@ -4,6 +4,36 @@
   top: 0;
 }
 
+.md-progress-bar.md-indeterminate.md-theme-default {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.md-field {
+  &.ssss {
+    label {
+      top: -0.8rem!important;
+    }
+    .v-select {
+      margin-top: 10px;
+    }
+  }
+
+  label {
+    top: -0.8rem;
+    font-size: 0.6875rem;
+  }
+
+  .v-select {
+    margin-top: 5px;
+    width: 100%;
+  }
+}
+
+
 .md-field .md-error {
   position: initial;
   padding-right: 5px;
@@ -17,7 +47,16 @@
   justify-content: flex-end;
 }
 
-.avatar-container > div {
+.avatar-table-row > div {
+  display: flex;
+  align-items: center;
+
+  h6 {
+    padding-left: 1em;
+  }
+}
+
+.avatar-container {
   width: 100px;
   height: 100px;
   border-radius: 50%;

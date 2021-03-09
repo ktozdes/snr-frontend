@@ -26,13 +26,13 @@
                                         <img :src="imageRegular"/>
                                     </div>
                                     <div class="button-container">
-                                        <md-button
-                                            class="md-danger md-round"
-                                            @click="removeImage"
-                                            v-if="imageRegular"
-                                        ><i class="fa fa-times"></i>Remove
-                                        </md-button
-                                        >
+<!--                                        <md-button-->
+<!--                                            class="md-danger md-round"-->
+<!--                                            @click="removeImage"-->
+<!--                                            v-if="imageRegular"-->
+<!--                                        ><i class="fa fa-times"></i>Remove-->
+<!--                                        </md-button-->
+<!--                                        >-->
                                         <md-button class="md-success md-round md-fileinput">
                                             <template v-if="!imageRegular">Select image</template>
                                             <template v-else>Change</template>
@@ -92,25 +92,22 @@
                                     </div>
                                 </div>
                                 <div class="md-layout">
-                                    <div class="md-layout-item">
+
+
+                                    <div class="md-layout-item" v-if="canDo('Organization', 'can_edit')">
                                         <md-field :class="{'md-invalid' : validationError.organization_id}">
-                                            <label for="organization_id">{{ 'Organization' | translate }}</label>
-                                            <md-select v-model="user.organization_id" id="organization_id">
-                                                <md-option value="">{{ 'No organization' | translate }}</md-option>
-                                                <md-option v-for="(organization, index) in organizations" :key="index"
-                                                           :value="organization.id">{{ organization.name }}
-                                                </md-option>
-                                            </md-select>
+                                            <label>{{ 'Organization' | translate }}</label>
+                                            <v-select v-model="user.organization_id"
+                                                      :reduce="tt => tt.code"
+                                                      :options="organizationOptions"></v-select>
                                         </md-field>
                                     </div>
-                                    <div class="md-layout-item">
+                                    <div class="md-layout-item" v-if="canDo('User Role', 'can_edit')">
                                         <md-field :class="{'md-invalid' : validationError.user_role_id}">
-                                            <label for="role_id">{{ 'Role' | translate }}</label>
-                                            <md-select v-model="user.user_role_id" id="role_id">
-                                                <md-option v-for="(role, index) in roles" :key="index" :value="role.id">
-                                                    {{ role.name }}
-                                                </md-option>
-                                            </md-select>
+                                            <label>{{ 'Role' | translate }}</label>
+                                            <v-select v-model="user.user_role_id"
+                                                      :reduce="tt => tt.code"
+                                                      :options="rolesOptions"></v-select>
                                             <span v-for="(error, key) in validationError.user_role_id"
                                                   :key="key"
                                                   class="md-error">{{ error }}</span>
@@ -197,7 +194,6 @@ export default {
                                 this.$store.dispatch('setCurrentOrganization', response.data.user.organization_id);
                             }
                         }
-                        this.$router.push({name: 'Dashboard'});
                     }
                 })
                 .catch(error => {
@@ -223,6 +219,22 @@ export default {
             return (this.user?.logo)
                 ? this.user.logo.thumbnail_url
                 : this.publicURL + "img/image_placeholder.jpg";
+        },
+        organizationOptions() {
+            return this.organizations.map(item => {
+                return {
+                    code: item.id,
+                    label: item.name
+                }
+            })
+        },
+        rolesOptions() {
+            return this.roles.map(item => {
+                return {
+                    code: item.id,
+                    label: item.name
+                }
+            })
         }
     }
 };

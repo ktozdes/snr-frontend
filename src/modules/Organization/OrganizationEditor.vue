@@ -26,13 +26,13 @@
                                         <img :src="imageRegular"/>
                                     </div>
                                     <div class="button-container">
-                                        <md-button
-                                            class="md-danger md-round"
-                                            @click="removeImage"
-                                            v-if="imageRegular"
-                                        ><i class="fa fa-times"></i>Remove
-                                        </md-button
-                                        >
+<!--                                        <md-button-->
+<!--                                            class="md-danger md-round"-->
+<!--                                            @click="removeImage"-->
+<!--                                            v-if="imageRegular"-->
+<!--                                        ><i class="fa fa-times"></i>Remove-->
+<!--                                        </md-button-->
+<!--                                        >-->
                                         <md-button class="md-success md-round md-fileinput">
                                             <template v-if="!imageRegular">Select image</template>
                                             <template v-else>Change</template>

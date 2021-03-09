@@ -4,6 +4,7 @@ module.exports = {
       sass: {
         data: `
           @import "@/assets/scss/main.scss";
+          @import "vue-select/src/scss/vue-select.scss";
         `
       }
     }
