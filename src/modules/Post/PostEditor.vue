@@ -68,6 +68,7 @@
                         <md-table-row>
                             <md-table-head>{{ 'Word' | translate }}</md-table-head>
                             <md-table-head>{{ 'Reaction' | translate }}</md-table-head>
+                            <md-table-head>{{ 'Rating' | translate }}</md-table-head>
                             <md-table-head>{{ 'Action' | translate }}</md-table-head>
                         </md-table-row>
 
@@ -89,6 +90,10 @@
                                            @click="setItemReaction(item, 'negative')">
                                     <md-icon>thumb_down</md-icon>
                                 </md-button>
+                            </md-table-cell>
+                            <md-table-cell>
+                                <reaction
+                                    :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
                             </md-table-cell>
                             <md-table-cell style="width:300px;text-align: center">
                                 <md-button class="md-just-icon md-danger" @click="removeWord(index)">
@@ -148,7 +153,6 @@ export default {
                 .then(response => {
                     if (response.data?.post) {
                         this.post = response.data.post;
-                        this.post.words = [];
                     }
                 })
                 .catch(error => {

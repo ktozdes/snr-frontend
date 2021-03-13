@@ -19,7 +19,7 @@
                                 <div class="file-input">
                                     <div v-if="!imageRegular">
                                         <div class="image-container">
-                                            <img :src="defaultImage" title=""/>
+                                            <img :src="defaultImage" title="salem"/>
                                         </div>
                                     </div>
                                     <div class="image-container" v-else>
@@ -92,8 +92,6 @@
                                     </div>
                                 </div>
                                 <div class="md-layout">
-
-
                                     <div class="md-layout-item" v-if="canDo('Organization', 'can_edit')">
                                         <md-field :class="{'md-invalid' : validationError.organization_id}">
                                             <label>{{ 'Organization' | translate }}</label>
@@ -113,6 +111,17 @@
                                                   class="md-error">{{ error }}</span>
                                         </md-field>
                                     </div>
+                                </div>
+                                <div class="md-layout" v-show="false">
+                                    <div class="md-layout-item">
+                                    <md-field class="ssss">
+                                        <label for="keywords">{{ 'Keyword' | translate }}</label>
+
+                                        <v-select v-model="keywords"
+                                                  :reduce="tt => tt.code"
+                                                  :options="keywordOptions" multiple></v-select>
+                                    </md-field>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -136,12 +145,13 @@ export default {
     data() {
         return {
             user: new User(),
+            setPassword: true,
+            imageRegular: "",
+            organizationKeywords: this.$store.getters.getOrganization?.keywords ?? [],
             keywords: [],
             roles: [],
             organizations: [],
-            setPassword: true,
             validationError: [],
-            imageRegular: "",
         };
     },
     created() {
@@ -216,14 +226,22 @@ export default {
             return valid;
         },
         defaultImage() {
-            return (this.user?.logo)
+            return (this.user?.logo?.thumbnail_url)
                 ? this.user.logo.thumbnail_url
-                : this.publicURL + "img/image_placeholder.jpg";
+                : '/img/default-avatar.png';
         },
         organizationOptions() {
             return this.organizations.map(item => {
                 return {
                     code: item.id,
+                    label: item.name
+                }
+            })
+        },
+        keywordOptions() {
+            return this.organizationKeywords.map(item => {
+                return {
+                    code: item.name,
                     label: item.name
                 }
             })

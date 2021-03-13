@@ -1,126 +1,162 @@
 .card-icon-right {
-  position: absolute;
-  right: 0;
-  top: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .md-progress-bar.md-indeterminate.md-theme-default {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
 }
 
 .md-field {
-  &.ssss {
+    &.ssss {
+        label {
+            top: -0.8rem !important;
+        }
+
+        .v-select {
+            margin-top: 10px;
+        }
+    }
+
     label {
-      top: -0.8rem!important;
+        top: -0.8rem;
+        font-size: 0.6875rem;
     }
+
     .v-select {
-      margin-top: 10px;
+        margin-top: 5px;
+        width: 100%;
     }
-  }
+}
 
-  label {
-    top: -0.8rem;
-    font-size: 0.6875rem;
-  }
+.sort-container {
+    cursor: pointer;
 
-  .v-select {
-    margin-top: 5px;
-    width: 100%;
-  }
+    .sort-icon-container {
+        opacity: 0;
+        transition: .3s cubic-bezier(.4, 0, .2, 1);
+
+        &.md-sorted-desc {
+            .md-icon {
+                transform: rotate(180deg);
+            }
+        }
+
+        &.is_active {
+            opacity: 1;
+        }
+
+        .md-icon {
+            font-size: 18px !important;
+            transition: .3s cubic-bezier(.4, 0, .2, 1);
+        }
+    }
+
+    &:hover {
+        .sort-icon-container {
+            opacity: 1;
+        }
+    }
 }
 
 
 .md-field .md-error {
-  position: initial;
-  padding-right: 5px;
+    position: initial;
+    padding-right: 5px;
 }
 
 .md-text-align-right {
-  text-align: right;
+    text-align: right;
 }
 
 .justify-content--flex-end {
-  justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 .avatar-table-row > div {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  h6 {
-    padding-left: 1em;
-  }
+    h6 {
+        padding-left: 1em;
+    }
 }
 
 .avatar-container {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
 
-  img {
-    height: 100px;
-  }
+    img {
+        height: 70px;
+    }
 }
 
 .mb-4 {
-  margin-bottom: 4rem;
+    margin-bottom: 4rem;
 }
 
 .file-input .image-container {
-  max-width: initial;
-  margin-bottom: 10px;
-  box-shadow: none;
-
-  img {
-    max-width: 150px;
+    max-width: initial;
     margin-bottom: 10px;
-    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .42), 0 4px 25px 0 rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
-  }
+    box-shadow: none;
+
+    img {
+        max-width: 150px;
+        margin-bottom: 10px;
+        box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .42), 0 4px 25px 0 rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
+    }
 }
 
-.post-list-table {
-  .post-rrr {
-  }
-
-  a {
-    color: #9c27b0 !important;
-  }
-
-
-  .img-container {
-    display: inline-block;
-  }
-
-  @media (min-width: 1000px) {
-    .img-container {
-      width: 200px;
-      height: 150px;
-      overflow: hidden;
-      display: inline-block;
-
-      img {
-        max-height: initial !important;
-      }
+.page-post-list {
+    .md-table-content {
+        min-height: 400px;
     }
-  }
+    .post-list-table {
+        .post-rrr {
+        }
+
+        a {
+            color: #9c27b0 !important;
+        }
 
 
-  .post-list-item-extra {
-    display: inline-block;
-    margin-left: 5px;
-    vertical-align: top;
+        .img-container {
+            display: inline-block;
+        }
 
-    .md-ripple {
-      padding: initial !important;
+        @media (min-width: 1000px) {
+            .img-container {
+                width: 200px;
+                height: 150px;
+                overflow: hidden;
+                display: inline-block;
+
+                img {
+                    max-height: initial !important;
+                }
+            }
+        }
+
+
+        .post-list-item-extra {
+            display: inline-block;
+            margin-left: 5px;
+            vertical-align: top;
+
+            .md-ripple {
+                padding: initial !important;
+            }
+
+            small {
+                margin-left: 5px;
+            }
+        }
     }
-
-    small {
-      margin-left: 5px;
-    }
-  }
 }

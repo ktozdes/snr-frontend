@@ -81,7 +81,6 @@ export default {
             this.axios.get(process.env.VUE_APP_API_URL + '/comment/' + this.post.id)
                 .then(response => {
                     this.items = response.data.items;
-                    console.log(response.data);
                 })
                 .catch(error => {
                     console.log(error);

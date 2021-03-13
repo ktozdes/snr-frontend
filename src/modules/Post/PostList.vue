@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout">
+    <div class="md-layout page-post-list">
         <div class="md-layout-item md-size-100">
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
@@ -18,8 +18,8 @@
                                         <label for="keywords">{{ 'Keyword' | translate }}</label>
 
                                         <v-select v-model="keywords"
-                                                      :reduce="tt => tt.code"
-                                                      :options="keywordOptions" multiple></v-select>
+                                                  :reduce="tt => tt.code"
+                                                  :options="keywordOptions" multiple></v-select>
                                     </md-field>
                                 </div>
                                 <div class="md-layout-item md-size-50 md-small-size-100">
@@ -30,11 +30,27 @@
                             </div>
                         </md-table-toolbar>
                         <md-table-row>
-                            <md-table-head>{{ 'Post' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Rating' | translate }}</md-table-head>
-                            <md-table-head>{{ 'User name' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Created date' | translate }}</md-table-head>
-                            <md-table-head>{{ 'Updated date' | translate }}</md-table-head>
+                            <md-table-head>
+                                <md-sort :sortingLabel="'id'" :sortBy="sortBy" @sorted="sorted">
+                                    {{ 'Post' | translate }}
+                                </md-sort>
+                            </md-table-head>
+                            <md-table-head>
+                                {{ 'Rating' | translate }}
+                            </md-table-head>
+                            <md-table-head>
+                                    {{ 'User name' | translate }}
+                            </md-table-head>
+                            <md-table-head>
+                                <md-sort :sortingLabel="'created_date'" :sortBy="sortBy" @sorted="sorted">
+                                    {{ 'Created date' | translate }}
+                                </md-sort>
+                            </md-table-head>
+                            <md-table-head>
+                                <md-sort :sortingLabel="'updated_date'" :sortBy="sortBy" @sorted="sorted">
+                                    {{ 'Updated date' | translate }}
+                                </md-sort>
+                            </md-table-head>
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
@@ -47,7 +63,9 @@
                                     <div class="post-list-item-extra">
                                         <md-button class="md-primary">
                                             <div class="card-icon">
-                                                <md-icon v-if="item.process_type === 'manual'" :title="'Manual' | translate ">perm_identity</md-icon>
+                                                <md-icon v-if="item.process_type === 'manual'"
+                                                         :title="'Manual' | translate ">perm_identity
+                                                </md-icon>
                                                 <md-icon v-else :title="'Automatic' | translate ">computer</md-icon>
                                             </div>
                                         </md-button>
@@ -60,6 +78,14 @@
                                             </div>
                                         </md-button>
                                         <small>{{ item.comments_count }}</small>
+                                    </div>
+                                    <div class="post-list-item-extra">
+                                        <md-button class="md-primary">
+                                            <div class="card-icon">
+                                                <md-icon :title="'Like' | translate ">thumb_up</md-icon>
+                                            </div>
+                                        </md-button>
+                                        <small>{{ item.like_count }}</small>
                                     </div>
 
                                 </a>
@@ -95,6 +121,7 @@ export default {
             items: [],
             currentPage: 1,
             pageCount: 0,
+            sortBy: 'id_desc',
             organizationKeywords: this.$store.getters.getOrganization?.keywords ?? [],
             keywords: []
         };
@@ -111,8 +138,9 @@ export default {
             this.getItems();
         },
         getItems() {
+            this.items = [];
             this.axios.get(process.env.VUE_APP_API_URL + '/post', {
-                params: {page: this.currentPage, keywords: this.keywords}
+                params: {page: this.currentPage, keywords: this.keywords, sort_by: this.sortBy}
             })
                 .then(response => {
                     this.items = response.data.items;
@@ -131,6 +159,12 @@ export default {
         showPost(item) {
             this.$store.dispatch('setRouterProp', item);
             this.$router.push({name: 'PostShow', params: {id: item.id}});
+        },
+        sorted(arg) {
+            this.sortBy = arg;
+            this.currentPage = 1;
+            this.getItems();
+
         }
     },
     computed: {
@@ -144,7 +178,7 @@ export default {
                     label: item.name
                 }
             })
-        }
+        },
     }
 };
 </script>

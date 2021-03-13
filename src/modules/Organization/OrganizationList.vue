@@ -32,6 +32,7 @@
                             <md-table-cell class="avatar-table-row">
                                 <div class="avatar-container">
                                     <img v-if="item.logo" :src="item.logo.thumbnail_url" alt="organization logo">
+                                    <img v-else :src="'./img/image_placeholder.jpg'" alt="organization default logo">
                                 </div>
                                 <h6>{{ item.name }}</h6>
                             </md-table-cell>

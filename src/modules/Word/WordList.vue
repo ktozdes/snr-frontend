@@ -73,6 +73,7 @@ export default {
             })
                 .then(response => {
                     this.items = response.data.items;
+                    this.pageCount = response.data.pagination.page_count;
                 })
                 .catch(error => {
                     console.log(error);

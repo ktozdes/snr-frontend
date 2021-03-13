@@ -11,19 +11,19 @@
                                 </div>
                             </div>
                             <div class="md-layout-item md-size-70 md-small-size-100">
-                                <div class="tim-typo">
+                                <div class="tim-typo" v-show="organization.name">
                                     <span class="tim-note">{{ 'Name' | translate }}</span>
                                     <p>{{ organization.name }}</p>
                                 </div>
-                                <div class="tim-typo">
+                                <div class="tim-typo" v-show="organization.email">
                                     <span class="tim-note">{{ 'Email' | translate }}</span>
                                     <p>{{ organization.email }}</p>
                                 </div>
-                                <div class="tim-typo">
+                                <div class="tim-typo" v-show="organization.phone">
                                     <span class="tim-note">{{ 'Phone' | translate }}</span>
                                     <p>{{ organization.phone }}</p>
                                 </div>
-                                <div class="tim-typo">
+                                <div class="tim-typo" v-show="organization.address">
                                     <span class="tim-note">{{ 'Address' | translate }}</span>
                                     <p>{{ organization.address }}</p>
                                 </div>

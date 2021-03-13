@@ -43,6 +43,21 @@
                                     <span class="tim-note">{{ 'Content' | translate }}</span>
                                     <p class="overflow-wrap--anywhere">{{ post.content }}</p>
                                 </div>
+                                <div class="tim-typo">
+                                    <span class="tim-note">{{ 'Additional' | translate }}</span>
+                                    <p>
+                                        <strong>{{ 'Likes' | translate }}</strong>
+                                        {{ post.like_count }}
+                                    </p>
+                                    <p>
+                                        <strong>{{ 'Created date' | translate }}</strong>
+                                        {{ post.formatted_date }}
+                                    </p>
+                                    <p>
+                                        <strong>{{ 'Updated date' | translate }}</strong>
+                                        {{ post.formatted_updated_date }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

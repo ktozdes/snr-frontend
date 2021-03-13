@@ -185,7 +185,7 @@ export default {
             return valid;
         },
         defaultImage() {
-            return (this.organization?.logo)
+            return (this.organization?.logo?.thumbnail_url)
                 ? this.organization.logo.thumbnail_url
                 : this.publicURL + "img/image_placeholder.jpg";
         }
