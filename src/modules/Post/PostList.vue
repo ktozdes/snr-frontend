@@ -173,7 +173,7 @@ export default {
             return this.items.length;
         },
         keywordOptions() {
-            if (this.userKeywords) {
+            if (this.userKeywords && this.userKeywords.length > 0) {
                 return this.userKeywords.map(item => {
                     return {
                         code: item.name,
