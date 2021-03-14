@@ -26,13 +26,13 @@
                                         <img :src="imageRegular"/>
                                     </div>
                                     <div class="button-container">
-<!--                                        <md-button-->
-<!--                                            class="md-danger md-round"-->
-<!--                                            @click="removeImage"-->
-<!--                                            v-if="imageRegular"-->
-<!--                                        ><i class="fa fa-times"></i>Remove-->
-<!--                                        </md-button-->
-<!--                                        >-->
+                                        <!--                                        <md-button-->
+                                        <!--                                            class="md-danger md-round"-->
+                                        <!--                                            @click="removeImage"-->
+                                        <!--                                            v-if="imageRegular"-->
+                                        <!--                                        ><i class="fa fa-times"></i>Remove-->
+                                        <!--                                        </md-button-->
+                                        <!--                                        >-->
                                         <md-button class="md-success md-round md-fileinput">
                                             <template v-if="!imageRegular">Select image</template>
                                             <template v-else>Change</template>
@@ -97,7 +97,8 @@
                                             <label>{{ 'Organization' | translate }}</label>
                                             <v-select v-model="user.organization_id"
                                                       :reduce="tt => tt.code"
-                                                      :options="organizationOptions"></v-select>
+                                                      :options="organizationOptions"
+                                                      @input="resetUserKeywords"></v-select>
                                         </md-field>
                                     </div>
                                     <div class="md-layout-item" v-if="canDo('User Role', 'can_edit')">
@@ -112,16 +113,16 @@
                                         </md-field>
                                     </div>
                                 </div>
-                                <div class="md-layout" v-show="false">
-                                    <div class="md-layout-item">
-                                    <md-field class="ssss">
-                                        <label for="keywords">{{ 'Keyword' | translate }}</label>
+                                <div class="md-layout">
+                                    <div class="md-layout-item" v-if="canDo('Keyword', 'can_edit')">
+                                        <md-field class="ssss">
+                                            <label for="keywords">{{ 'Keywords' | translate }}</label>
 
-                                        <v-select v-model="keywords"
-                                                  :reduce="tt => tt.code"
-                                                  :options="keywordOptions" multiple></v-select>
-                                    </md-field>
-                                </div>
+                                            <v-select v-model="keywords"
+                                                      :reduce="tt => tt.code"
+                                                      :options="keywordOptions" multiple></v-select>
+                                        </md-field>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,7 +148,7 @@ export default {
             user: new User(),
             setPassword: true,
             imageRegular: "",
-            organizationKeywords: this.$store.getters.getOrganization?.keywords ?? [],
+            organizationKeywords: [],
             keywords: [],
             roles: [],
             organizations: [],
@@ -168,6 +169,9 @@ export default {
                     this.user = new User(response.data.user);
                     this.organizations = response.data.organizations;
                     this.roles = response.data.roles;
+                    if (response.data.user?.keywords) {
+                        this.keywords = response.data.user.keywords.map(keyword => keyword.id);
+                    }
                 })
                 .catch(error => {
                     console.log(error);
@@ -191,7 +195,11 @@ export default {
             this.imageRegular = "";
             this.organization.image = "";
         },
+        resetUserKeywords() {
+            this.keywords = [];
+        },
         submit() {
+            this.user.keywords = this.keywords;
             const url = process.env.VUE_APP_API_URL + ((this.user.id) ? '/user/update/' + this.user.id : '/user/store');
             this.axios.post(url, this.user)
                 .then(response => {
@@ -239,12 +247,21 @@ export default {
             })
         },
         keywordOptions() {
-            return this.organizationKeywords.map(item => {
-                return {
-                    code: item.name,
-                    label: item.name
+            if (this.organizations && this.user.organization_id) {
+                let selectedOrganization = this.organizations.find(organization => organization.id === this.user.organization_id);
+                if (selectedOrganization?.keywords) {
+                    return selectedOrganization.keywords.map(item => {
+                        return {
+                            code: item.id,
+                            label: item.name
+                        }
+                    })
                 }
-            })
+
+                return [];
+            }
+            return [];
+
         },
         rolesOptions() {
             return this.roles.map(item => {

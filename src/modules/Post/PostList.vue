@@ -39,7 +39,7 @@
                                 {{ 'Rating' | translate }}
                             </md-table-head>
                             <md-table-head>
-                                    {{ 'User name' | translate }}
+                                {{ 'User name' | translate }}
                             </md-table-head>
                             <md-table-head>
                                 <md-sort :sortingLabel="'created_date'" :sortBy="sortBy" @sorted="sorted">
@@ -123,6 +123,7 @@ export default {
             pageCount: 0,
             sortBy: 'id_desc',
             organizationKeywords: this.$store.getters.getOrganization?.keywords ?? [],
+            userKeywords: this.$store.getters.getUser?.keywords ?? [],
             keywords: []
         };
     },
@@ -172,6 +173,14 @@ export default {
             return this.items.length;
         },
         keywordOptions() {
+            if (this.userKeywords) {
+                return this.userKeywords.map(item => {
+                    return {
+                        code: item.name,
+                        label: item.name
+                    }
+                })
+            }
             return this.organizationKeywords.map(item => {
                 return {
                     code: item.name,

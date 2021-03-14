@@ -27,10 +27,17 @@
                                     <span class="tim-note">{{ 'Address' | translate }}</span>
                                     <p>{{ organization.address }}</p>
                                 </div>
-                                <div class="tim-typo" v-if="computedKeywords">
-                                    <span class="tim-note">{{ 'Keywords' | translate }}</span>
+                                <div class="tim-typo" v-if="organizationKeywords">
+                                    <span class="tim-note">{{ 'Organization keywords' | translate }}</span>
                                     <md-chips
-                                        v-model="computedKeywords"
+                                        v-model="organizationKeywords"
+                                        class="md-primary"
+                                    ></md-chips>
+                                </div>
+                                <div class="tim-typo" v-if="userKeywords">
+                                    <span class="tim-note">{{ 'User keywords' | translate }}</span>
+                                    <md-chips
+                                        v-model="userKeywords"
                                         class="md-primary"
                                     ></md-chips>
                                 </div>
@@ -192,6 +199,7 @@ export default {
     data() {
         return {
             organization: this.$store.getters.getOrganization,
+            user: this.$store.getters.getUser,
             product1: "./img/card-2.jpg",
             product2: "./img/card-3.jpg",
             product3: "./img/card-1.jpg",
@@ -247,9 +255,15 @@ export default {
         };
     },
     computed: {
-        computedKeywords() {
+        organizationKeywords() {
             if (this.organization?.keywords) {
                 return this.organization.keywords.map(item => item.name);
+            }
+            return [];
+        },
+        userKeywords() {
+            if (this.user?.keywords) {
+                return this.user.keywords.map(item => item.name);
             }
             return [];
         }
