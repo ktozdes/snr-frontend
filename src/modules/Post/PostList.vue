@@ -13,7 +13,7 @@
                     <md-table table-header-color="green" class="post-list-table">
                         <md-table-toolbar>
                             <div class="md-layout">
-                                <div class="md-layout-item md-size-50 md-small-size-100">
+                                <div class="md-layout-item md-size-33 md-small-size-100">
                                     <md-field class="ssss">
                                         <label for="keywords">{{ 'Keyword' | translate }}</label>
 
@@ -22,7 +22,13 @@
                                                   :options="keywordOptions" multiple></v-select>
                                     </md-field>
                                 </div>
-                                <div class="md-layout-item md-size-50 md-small-size-100">
+                                <div class="md-layout-item md-size-33 md-small-size-100">
+                                    <md-field>
+                                        <label>{{ 'Author username' | translate }}</label>
+                                        <md-input v-model="authorUsername" type="text"></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-33 md-small-size-100">
                                     <md-field class="justify-content--flex-end">
                                         <md-button @click="filterByKeyWord">{{ 'Filter' | translate }}</md-button>
                                     </md-field>
@@ -94,7 +100,9 @@
                                 <reaction
                                     :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
                             </md-table-cell>
-                            <md-table-cell>{{ item.author_username }}</md-table-cell>
+                            <md-table-cell>
+                                <a :href="'https://www.instagram.com/p/' + item.code" target="_blank">{{ item.author_username }}</a>
+                            </md-table-cell>
                             <md-table-cell>{{ item.formatted_date }}</md-table-cell>
                             <md-table-cell>{{ item.formatted_updated_date }}</md-table-cell>
                         </md-table-row>
@@ -119,29 +127,56 @@ export default {
     data() {
         return {
             items: [],
+            queryFilter: this.$store.getters.getQueryFilter.post ?? null,
             currentPage: 1,
+            sortBy: '',
+            authorUsername: '',
             pageCount: 0,
-            sortBy: 'id_desc',
             organizationKeywords: this.$store.getters.getOrganization?.keywords ?? [],
             userKeywords: this.$store.getters.getUser?.keywords ?? [],
             keywords: []
         };
     },
     created() {
+        if (this.queryFilter?.page) {
+            this.currentPage = this.queryFilter.page;
+        }
+        if (this.queryFilter?.keywords) {
+            this.keywords = this.queryFilter.keywords;
+        }
+        if (this.queryFilter?.sortBy) {
+            this.sortBy = this.queryFilter.sortBy;
+        }
+        if (this.queryFilter?.authorUsername) {
+            this.authorUsername = this.queryFilter.authorUsername;
+        }
         this.getItems();
     },
     methods: {
         paginate() {
+            this.updateQueryFilter();
             this.getItems();
         },
         filterByKeyWord() {
             this.currentPage = 1;
+            this.updateQueryFilter();
+            this.getItems();
+        },
+        sorted(arg) {
+            this.sortBy = arg;
+            this.currentPage = 1;
+            this.updateQueryFilter();
             this.getItems();
         },
         getItems() {
             this.items = [];
             this.axios.get(process.env.VUE_APP_API_URL + '/post', {
-                params: {page: this.currentPage, keywords: this.keywords, sort_by: this.sortBy}
+                params: {
+                    page: this.currentPage,
+                    keywords: this.keywords,
+                    sort_by: this.sortBy,
+                    author_username: this.authorUsername
+                }
             })
                 .then(response => {
                     this.items = response.data.items;
@@ -161,12 +196,16 @@ export default {
             this.$store.dispatch('setRouterProp', item);
             this.$router.push({name: 'PostShow', params: {id: item.id}});
         },
-        sorted(arg) {
-            this.sortBy = arg;
-            this.currentPage = 1;
-            this.getItems();
-
-        }
+        updateQueryFilter() {
+            this.$store.dispatch('setQueryFilter', {
+                'post': {
+                    'sortBy': this.sortBy,
+                    'page': this.currentPage,
+                    'keywords': this.keywords,
+                    'authorUsername': this.authorUsername,
+                }
+            });
+        },
     },
     computed: {
         total() {

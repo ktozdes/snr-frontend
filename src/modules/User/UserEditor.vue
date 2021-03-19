@@ -5,7 +5,7 @@
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
                         <md-icon>{{ user.id ? 'edit' : 'add' }}</md-icon>
-                        <md-icon>account_box</md-icon>
+                        <md-icon>manage_accounts</md-icon>
                     </div>
                     <h4 class="title">{{
                             (user.id ? 'Edit user' : 'Create user') | translate
@@ -206,7 +206,10 @@ export default {
                     if (response.status === 200) {
                         let user = this.$store.getters.getUser;
                         if (user.id === this.user.id) {
-                            user.logo = response.data.user.logo;
+                            let accessToken = user.access_token;
+                            user = response.data.user;
+                            user.access_token = accessToken;
+                            user.is_authorized = true;
                             this.$store.dispatch('login', user);
                             if (response.data.user.organization_id) {
                                 this.$store.dispatch('setCurrentOrganization', response.data.user.organization_id);

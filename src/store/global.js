@@ -4,7 +4,8 @@ import Vue from "vue";
 export default {
 	state: {
 		routerProp: null,
-		organization: []
+		organization: [],
+		queryFilter: {},
 	},
 	getters: {
 		getRouterProp(state) {
@@ -12,6 +13,9 @@ export default {
 		},
 		getOrganization(state) {
 			return state.organization;
+		},
+		getQueryFilter(state) {
+			return state.queryFilter;
 		}
 	},
 	actions: {
@@ -21,10 +25,14 @@ export default {
 		setOrganization(state, organization) {
 			state.commit('setOrganization', organization);
 		},
+		setQueryFilter(state, queryFilter) {
+			state.commit('setQueryFilter', queryFilter);
+		},
 		setCurrentOrganization(state, organizationID) {
 			Vue.axios.get(process.env.VUE_APP_API_URL + '/organization/show/' + organizationID)
 				.then(response => {
 					if (response.data?.organization) {
+
 						state.commit('setOrganization', response.data?.organization);
 					}
 				})
@@ -42,6 +50,13 @@ export default {
 		setOrganization(state, organization) {
 			state.organization = organization;
 			console.log('%c organization', 'color: #3273dc', state.organization);
+		},
+		setQueryFilter(state, queryFilter) {
+			state.queryFilter ={
+				... state.queryFilter,
+				... queryFilter
+			};
+			console.log('%c queryFilter', 'color: #3273dc', state.queryFilter);
 		},
 		setCurrentOrganization(state, organizationID) {
 			console.log('%c setCurrentOrganization', 'color: #3273dc', state.organization);

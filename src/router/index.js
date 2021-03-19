@@ -23,6 +23,10 @@ import WordList from "@/modules/Word/WordList";
 import WordEditor from "@/modules/Word/WordEditor";
 import WordSelector from "@/modules/Word/WordSelector";
 
+
+import SocialNetworkUserList from "@/modules/SocialNetworkUser/SocialNetworkUserList";
+import SocialNetworkUserEditor from "@/modules/SocialNetworkUser/SocialNetworkUserEditor";
+
 import RoleList from "@/modules/Role/RoleList";
 import RoleEditor from "@/modules/Role/RoleEditor";
 
@@ -112,6 +116,33 @@ let dashboardPages = {
 				middleware: ['auth']
 			},
 		},
+
+		{
+			path: "social-network-user",
+			name: "SocialNetworkUserList",
+			components: {default: SocialNetworkUserList},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "social-network-user/edit/:id",
+			name: "SocialNetworkUserEdit",
+			components: {default: SocialNetworkUserEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+		{
+			path: "social-network-user/create/",
+			name: "SocialNetworkUserCreate",
+			components: {default: SocialNetworkUserEditor},
+			meta: {
+				middleware: ['auth']
+			},
+		},
+
+
 		{
 			path: "role",
 			name: "RoleList",

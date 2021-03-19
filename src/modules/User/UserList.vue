@@ -4,7 +4,7 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>account_box</md-icon>
+                        <md-icon>manage_accounts</md-icon>
                     </div>
                     <h4 class="title">{{ 'Users' | translate }}</h4>
                     <router-link v-if="canDo('User', 'can_create')" :to="{path: 'user/create/'}">

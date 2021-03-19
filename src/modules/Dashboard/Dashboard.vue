@@ -32,15 +32,26 @@
                                     <md-chips
                                         v-model="organizationKeywords"
                                         class="md-primary"
+                                        :md-placeholder="'Add organization keyword ...' | translate"
                                     ></md-chips>
+                                    <md-button v-if="canDo('Keyword', 'can_edit')" class="md-sm md-round md-success"
+                                               @click="saveOrganizationKeywords">
+                                        {{ 'Save' | translate }}
+                                    </md-button>
                                 </div>
                                 <div class="tim-typo" v-if="userKeywords">
                                     <span class="tim-note">{{ 'User keywords' | translate }}</span>
                                     <md-chips
                                         v-model="userKeywords"
                                         class="md-primary"
+                                        :md-placeholder="'Add user keyword ...' | translate"
                                     ></md-chips>
+                                    <md-button v-if="canDo('Keyword', 'can_edit')" class="md-sm md-round md-success"
+                                               @click="saveUserKeywords">
+                                        {{ 'Save' | translate }}
+                                    </md-button>
                                 </div>
+
                             </div>
                         </div>
                     </md-card-content>
@@ -200,11 +211,12 @@ export default {
         return {
             organization: this.$store.getters.getOrganization,
             user: this.$store.getters.getUser,
+            userKeywords: [],
+            organizationKeywords: [],
             product1: "./img/card-2.jpg",
             product2: "./img/card-3.jpg",
             product3: "./img/card-1.jpg",
             seq2: 0,
-
 
 
             emailsSubscriptionChart: {
@@ -254,19 +266,52 @@ export default {
             }
         };
     },
-    computed: {
-        organizationKeywords() {
-            if (this.organization?.keywords) {
-                return this.organization.keywords.map(item => item.name);
-            }
-            return [];
+    created() {
+        this.setKeywords();
+
+    },
+    methods: {
+        setKeywords() {
+            this.userKeywords = this.user.keywords.map((keyword) => keyword.name);
+            this.organizationKeywords = this.organization.keywords.map((keyword) => keyword.name);
         },
-        userKeywords() {
-            if (this.user?.keywords) {
-                return this.user.keywords.map(item => item.name);
-            }
-            return [];
+        handleResponse(response) {
+            this.user.keywords = response.data.user_keywords;
+            this.organization.keywords = response.data.organization_keywords;
+            this.$store.dispatch('login', this.user);
+            this.$store.dispatch('setOrganization', this.organization);
+            this.setKeywords();
+        },
+        saveUserKeywords() {
+            const url = process.env.VUE_APP_API_URL + '/keyword/user-sync/' + this.user.id;
+            this.axios.post(url, {keywords: this.userKeywords})
+                .then(response => {
+                    if (response.status === 200) {
+                        this.handleResponse(response);
+                    }
+                })
+                .catch(error => {
+                    console.log('error', error);
+                    if (error.response.status === 422) {
+                        this.validationError = error.response.data.errors;
+                    }
+                });
+        },
+        saveOrganizationKeywords() {
+            const url = process.env.VUE_APP_API_URL + '/keyword/organization-sync/' + this.organization.id;
+            this.axios.post(url, {keywords: this.organizationKeywords})
+                .then(response => {
+                    if (response.status === 200) {
+                        this.handleResponse(response);
+                    }
+                })
+                .catch(error => {
+                    console.log('error', error);
+                    if (error.response.status === 422) {
+                        this.validationError = error.response.data.errors;
+                    }
+                });
         }
-    }
+    },
 };
 </script>

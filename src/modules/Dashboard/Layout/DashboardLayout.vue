@@ -28,10 +28,13 @@
                     :link="{ name: 'Role', icon: 'add_task', path: '/role' }"
                 ></sidebar-item>
                 <sidebar-item v-if="canDo('User', 'can_view')"
-                    :link="{ name: 'User', icon: 'account_box', path: '/user' }"
+                    :link="{ name: 'User', icon: 'manage_accounts', path: '/user' }"
                 ></sidebar-item>
                 <sidebar-item  v-if="canDo('Word', 'can_view')"
                     :link="{ name: 'Word', icon: 'font_download', path: '/word' }"
+                ></sidebar-item>
+                <sidebar-item v-if="canDo('Social Network User', 'can_view')"
+                    :link="{ name: 'Social Network User', icon: 'account_box', path: '/social-network-user' }"
                 ></sidebar-item>
             </template>
         </side-bar>

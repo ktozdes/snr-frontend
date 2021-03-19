@@ -30,7 +30,7 @@
                             <div class="row">
                                 <div class="tim-typo">
                                     <span class="tim-note">{{ 'Author' | translate }}</span>
-                                    <p>{{ post.author_username }}</p>
+                                    <p><a :href="'https://www.instagram.com/p/' + post.code" target="_blank">{{ post.author_username }}</a></p>
                                 </div>
                                 <div class="tim-typo">
                                     <span class="tim-note">{{ 'Rating' | translate }}</span>
