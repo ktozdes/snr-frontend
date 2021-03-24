@@ -78,7 +78,8 @@ export default {
 }
 .reaction-container .md-button {
     margin: 0!important;
-    min-width: auto!important;
+    min-width: 8%!important;
+    max-width: 75%;
     border-radius: 0!important;;
 }
 .reaction-container .md-button .md-ripple {

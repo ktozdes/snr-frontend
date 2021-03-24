@@ -11,6 +11,16 @@
     left: 0;
     z-index: 9999;
 }
+.post-word-stats {
+    .md-card-actions {
+        display: block;
+    }
+}
+.comment-word-stats {
+    .md-card-actions {
+        display: block;
+    }
+}
 
 .md-field {
     &.ssss {
@@ -114,7 +124,7 @@
     }
 }
 
-.page-post-list {
+.page-post-list, .page-social-network-user-comments-list {
     .md-table-content {
         min-height: 400px;
     }
@@ -159,4 +169,10 @@
             }
         }
     }
+}
+
+
+.reaction-column {
+    min-width: 200px;
+
 }

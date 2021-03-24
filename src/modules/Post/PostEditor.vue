@@ -4,7 +4,7 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>font_download</md-icon>
+                        <md-icon>collections</md-icon>
                     </div>
                     <div class="card-icon" v-if="post">
                         <md-icon v-if="post.process_type === 'manual'">ballet</md-icon>

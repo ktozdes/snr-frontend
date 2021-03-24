@@ -66,7 +66,7 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>add_task</md-icon>
+                        <md-icon>comment</md-icon>
                     </div>
                     <h4 class="title">{{ 'Comments' | translate }}</h4>
                 </md-card-header>

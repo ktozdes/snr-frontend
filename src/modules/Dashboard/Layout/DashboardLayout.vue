@@ -19,7 +19,7 @@
                     :link="{ name: 'Dashboard', icon: 'dashboard', path: '/dashboard' }"
                 ></sidebar-item>
                 <sidebar-item  v-if="canDo('Post', 'can_view')"
-                    :link="{ name: 'Post', icon: 'article', path: '/post' }"
+                    :link="{ name: 'Post', icon: 'collections', path: '/post' }"
                 ></sidebar-item>
                 <sidebar-item v-if="canDo('Organization', 'can_view')"
                     :link="{ name: 'Organization', icon: 'business', path: '/organization' }"

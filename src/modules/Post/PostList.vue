@@ -4,7 +4,7 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>font_download</md-icon>
+                        <md-icon>collections</md-icon>
                     </div>
                     <h4 class="title">{{ 'Posts' | translate }}</h4>
                 </md-card-header>
@@ -41,7 +41,7 @@
                                     {{ 'Post' | translate }}
                                 </md-sort>
                             </md-table-head>
-                            <md-table-head>
+                            <md-table-head class="reaction-column">
                                 {{ 'Rating' | translate }}
                             </md-table-head>
                             <md-table-head>

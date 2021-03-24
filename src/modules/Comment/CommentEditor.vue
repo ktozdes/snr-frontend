@@ -4,7 +4,7 @@
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
                     <div class="card-icon">
-                        <md-icon>font_download</md-icon>
+                        <md-icon>comment</md-icon>
                     </div>
                     <div class="card-icon" v-if="comment">
                         <md-icon v-if="comment.process_type === 'manual'">perm_identity</md-icon>

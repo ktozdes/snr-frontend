@@ -58,98 +58,114 @@
                 </md-card-content>
             </md-card>
         </div>
-        <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+        <div v-if="reportData.total_posts" class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50">
             <stats-card header-color="blue">
                 <template slot="header">
                     <div class="card-icon">
-                        <i class="fab fa-twitter"></i>
+                        <md-icon>collections</md-icon>
                     </div>
-                    <p class="category">Folowers</p>
+                    <p class="category">{{ 'Posts' | translate }}</p>
                     <h3 class="title">
-                        +
-                        <animated-number :value="245"></animated-number>
+                        {{ 'Total' | translate }}
+                        <animated-number :value="reportData.total_posts"></animated-number>
                     </h3>
+
                 </template>
 
                 <template slot="footer">
                     <div class="stats">
-                        <md-icon>update</md-icon>
-                        Just Updated
+                        <p class="text-left">
+                            {{ 'Auto processed' | translate }}
+                            <animated-number :value="reportData.auto_processed_posts"></animated-number>
+                        </p>
+                        <p>
+                            {{ 'Manual processed' | translate }}
+                            <animated-number :value="reportData.manual_processed_posts"></animated-number>
+                        </p>
                     </div>
                 </template>
             </stats-card>
         </div>
-        <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-            <stats-card header-color="rose">
-                <template slot="header">
-                    <div class="card-icon">
-                        <md-icon>equalizer</md-icon>
-                    </div>
-                    <p class="category">Website Visits</p>
-                    <h3 class="title">
-                        <animated-number :value="75"></animated-number>
-                        .
-                        <animated-number
-                            :value="521"
-                        ></animated-number>
-                    </h3>
-                </template>
-
-                <template slot="footer">
-                    <div class="stats">
-                        <md-icon>local_offer</md-icon>
-                        Tracked from Google Analytics
-                    </div>
-                </template>
-            </stats-card>
-        </div>
-        <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+        <div v-if="reportData.total_comments" class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50">
             <stats-card header-color="green">
                 <template slot="header">
                     <div class="card-icon">
-                        <md-icon>store</md-icon>
+                        <md-icon>comment</md-icon>
                     </div>
-                    <p class="category">Revenue</p>
+                    <p class="category">{{ 'Comments' | translate }}</p>
                     <h3 class="title">
-                        $
-                        <animated-number :value="34"></animated-number>
-                        ,
-                        <animated-number
-                            :value="245"
-                        ></animated-number>
+                        {{ 'Total' | translate }}
+                        <animated-number :value="reportData.total_comments"></animated-number>
                     </h3>
+
                 </template>
 
                 <template slot="footer">
                     <div class="stats">
-                        <md-icon>date_range</md-icon>
-                        Last
-                        <animated-number :value="24"></animated-number>
-                        Hours
+                        <p class="text-left">
+                            {{ 'Auto processed' | translate }}
+                            <animated-number :value="reportData.auto_processed_comments"></animated-number>
+                        </p>
+                        <p>
+                            {{ 'Manual processed' | translate }}
+                            <animated-number :value="reportData.manual_processed_comments"></animated-number>
+                        </p>
                     </div>
                 </template>
             </stats-card>
         </div>
-        <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-            <stats-card header-color="warning">
+
+        <div v-if="reportData.total_post_process" class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50 ">
+            <stats-card header-color="blue" class="post-word-stats">
                 <template slot="header">
                     <div class="card-icon">
-                        <md-icon>weekend</md-icon>
+                        <md-icon>comment</md-icon>
+                        <md-icon>font_download</md-icon>
                     </div>
-                    <p class="category">Bookings</p>
+                    <p class="category">{{ 'Post words' | translate }}</p>
                     <h3 class="title">
-                        <animated-number :value="184"></animated-number>
+                        {{ 'Total' | translate }}
+                        <animated-number :value="reportData.total_post_process.words_count"></animated-number>
                     </h3>
+
                 </template>
 
                 <template slot="footer">
-                    <div class="stats">
-                        <md-icon class="text-danger">warning</md-icon>
-                        <a href="#pablo">Get More Space...</a>
-                    </div>
+                        <reaction
+                            :reactions="{
+                                positive:reportData.total_post_process.positive ,
+                                negative:reportData.total_post_process.negative,
+                                neutral:reportData.total_post_process.neutral}"></reaction>
                 </template>
             </stats-card>
         </div>
+
+        <div v-if="reportData.total_comment_process" class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50 ">
+            <stats-card header-color="green" class="comment-word-stats">
+                <template slot="header">
+                    <div class="card-icon">
+                        <md-icon>comment</md-icon>
+                        <md-icon>font_download</md-icon>
+                    </div>
+                    <p class="category">{{ 'Comment words' | translate }}</p>
+                    <h3 class="title">
+                        {{ 'Total' | translate }}
+                        <animated-number :value="reportData.total_comment_process.words_count"></animated-number>
+                    </h3>
+
+                </template>
+
+                <template slot="footer">
+                        <reaction
+                            :reactions="{
+                                positive:reportData.total_comment_process.positive ,
+                                negative:reportData.total_comment_process.negative,
+                                neutral:reportData.total_comment_process.neutral}"></reaction>
+                </template>
+            </stats-card>
+        </div>
+
+
         <div
             class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
         >
@@ -200,9 +216,11 @@ import {
     AnimatedNumber,
 } from "@/components";
 import {Organization} from "@/interfaces/Organization";
+import Reaction from "@/components/Reaction";
 
 export default {
     components: {
+        Reaction,
         StatsCard,
         ChartCard,
         AnimatedNumber,
@@ -213,10 +231,7 @@ export default {
             user: this.$store.getters.getUser,
             userKeywords: [],
             organizationKeywords: [],
-            product1: "./img/card-2.jpg",
-            product2: "./img/card-3.jpg",
-            product3: "./img/card-1.jpg",
-            seq2: 0,
+            reportData: [],
 
 
             emailsSubscriptionChart: {
@@ -268,12 +283,29 @@ export default {
     },
     created() {
         this.setKeywords();
+        this.getReportData();
 
     },
     methods: {
         setKeywords() {
             this.userKeywords = this.user.keywords.map((keyword) => keyword.name);
             this.organizationKeywords = this.organization.keywords.map((keyword) => keyword.name);
+        },
+        getReportData() {
+            const url = process.env.VUE_APP_API_URL + '/report/total';
+            this.axios.get(url)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.reportData = response.data.report;
+                        console.log(this.reportData, this.reportData.manual_processed_posts);
+                    }
+                })
+                .catch(error => {
+                    console.log('error', error);
+                    if (error.response.status === 422) {
+                        this.validationError = error.response.data.errors;
+                    }
+                });
         },
         handleResponse(response) {
             this.user.keywords = response.data.user_keywords;

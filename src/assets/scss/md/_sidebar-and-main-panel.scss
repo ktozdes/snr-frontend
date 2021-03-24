@@ -349,8 +349,8 @@
         .simple-text{
             padding: $padding-small-vertical $padding-zero;
             display: inline-block;
-            font-size: 18px;
             white-space: nowrap;
+            font-size: 18px;
             font-weight: $font-weight-default;
             line-height: 30px;
             overflow: hidden;
@@ -696,6 +696,7 @@
                 a.logo-normal{
                     opacity: 1;
                     @include transform-translate-x(0px);
+                    white-space: initial;
                 }
             }
 

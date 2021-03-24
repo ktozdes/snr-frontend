@@ -19,24 +19,34 @@
                             </md-table-head>
                             <md-table-head>{{ 'Username' | translate }}</md-table-head>
                             <md-table-head>{{ 'Instagram ID' | translate }}</md-table-head>
-                            <md-table-head md-numeric>
-                                <md-sort :sortingLabel="'post_count'" :sortBy="sortBy" @sorted="sorted">
+                            <md-table-head md-numeric class="text-center">
+<!--                                <md-sort :sortingLabel="'post_count'" :sortBy="sortBy" @sorted="sorted">-->
                                     {{ 'Post count' | translate }}
-                                </md-sort></md-table-head>
-                            <md-table-head md-numeric>
-                                <md-sort :sortingLabel="'comment_count'" :sortBy="sortBy" @sorted="sorted">
+<!--                                </md-sort>-->
+                            </md-table-head>
+                            <md-table-head md-numeric class="text-center">
+                                <!--<md-sort :sortingLabel="'comment_count'" :sortBy="sortBy" @sorted="sorted">-->
                                     {{ 'Comment count' | translate }}
-                                </md-sort>
+                               <!--</md-sort>-->
                             </md-table-head>
 
                         </md-table-row>
 
                         <md-table-row v-for="(item, index) in items" :key="index">
                             <md-table-cell>{{ item.id }}</md-table-cell>
-                            <md-table-cell>{{ item.username }}</md-table-cell>
+                            <md-table-cell>
+                                <router-link v-if="canDo('Organization', 'can_edit')"
+                                           :to="{path: 'social-network-user/edit/' + item.id}"
+                                           class="md-just-icon md-success">
+                                    {{ item.username }}
+                                </router-link>
+                                <div v-else>
+                                    {{ item.username }}
+                                </div>
+                                </md-table-cell>
                             <md-table-cell>{{ item.insta_id }}</md-table-cell>
-                            <md-table-cell>{{ item.posts_count }}</md-table-cell>
-                            <md-table-cell>{{ item.comments_count }}</md-table-cell>
+                            <md-table-cell class="text-center">{{ item.posts_count }}</md-table-cell>
+                            <md-table-cell class="text-center">{{ item.comments_count }}</md-table-cell>
                         </md-table-row>
                     </md-table>
                 </md-card-content>
