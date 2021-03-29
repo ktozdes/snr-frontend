@@ -41,6 +41,16 @@
                                     {{ 'Post' | translate }}
                                 </md-sort>
                             </md-table-head>
+                            <md-table-head>
+                                <md-sort :sortingLabel="'comment'" :sortBy="sortBy" @sorted="sorted">
+                                    {{ 'Comments' | translate }}
+                                </md-sort>
+                            </md-table-head>
+                            <md-table-head>
+                                <md-sort :sortingLabel="'like_count'" :sortBy="sortBy" @sorted="sorted">
+                                    {{ 'Likes' | translate }}
+                                </md-sort>
+                            </md-table-head>
                             <md-table-head class="reaction-column">
                                 {{ 'Rating' | translate }}
                             </md-table-head>
@@ -77,6 +87,12 @@
                                         </md-button>
                                         <small>{{ item.id }}</small>
                                     </div>
+                                </a>
+                            </md-table-cell>
+                            <md-table-cell class="post-rrr">
+                                <a v-if="canDo('Comment', 'can_view')" @click="showPost(item)"
+                                   href="javascript:void(0)">
+
                                     <div class="post-list-item-extra">
                                         <md-button class="md-primary">
                                             <div class="card-icon">
@@ -85,6 +101,12 @@
                                         </md-button>
                                         <small>{{ item.comments_count }}</small>
                                     </div>
+                                </a>
+                            </md-table-cell>
+                            <md-table-cell class="post-rrr">
+                                <a v-if="canDo('Comment', 'can_view')" @click="showPost(item)"
+                                   href="javascript:void(0)">
+
                                     <div class="post-list-item-extra">
                                         <md-button class="md-primary">
                                             <div class="card-icon">
@@ -185,12 +207,6 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
-        },
-        getThumbnail(fileName) {
-            if (fileName !== null) {
-                return process.env.VUE_APP_API_UPLOADS + fileName;
-            }
-            return this.publicURL + "img/image_placeholder.jpg";
         },
         showPost(item) {
             this.$store.dispatch('setRouterProp', item);

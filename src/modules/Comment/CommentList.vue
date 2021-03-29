@@ -90,9 +90,6 @@ export default {
             this.$store.dispatch('setRouterProp', item);
             this.$router.push({ name: 'WordSelector'});
         },
-        getThumbnail() {
-            return process.env.VUE_APP_API_URL + "/image/proxy/" + this.post.thumbnail;
-        },
         hasProcessed(item) {
             return item.id % 2 === 0;
         }

@@ -115,7 +115,8 @@
             </stats-card>
         </div>
 
-        <div v-if="reportData.total_post_process" class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50 ">
+        <div v-if="reportData.total_post_process"
+             class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50 ">
             <stats-card header-color="blue" class="post-word-stats">
                 <template slot="header">
                     <div class="card-icon">
@@ -131,8 +132,8 @@
                 </template>
 
                 <template slot="footer">
-                        <reaction
-                            :reactions="{
+                    <reaction
+                        :reactions="{
                                 positive:reportData.total_post_process.positive ,
                                 negative:reportData.total_post_process.negative,
                                 neutral:reportData.total_post_process.neutral}"></reaction>
@@ -140,29 +141,57 @@
             </stats-card>
         </div>
 
-        <div v-if="reportData.total_comment_process" class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50 ">
-            <stats-card header-color="green" class="comment-word-stats">
+        <div class="md-layout-item md-size-100">
+            <global-sales-card header-color="green">
                 <template slot="header">
                     <div class="card-icon">
-                        <md-icon>comment</md-icon>
-                        <md-icon>font_download</md-icon>
+                        <md-icon>language</md-icon>
                     </div>
-                    <p class="category">{{ 'Comment words' | translate }}</p>
-                    <h3 class="title">
-                        {{ 'Total' | translate }}
-                        <animated-number :value="reportData.total_comment_process.words_count"></animated-number>
-                    </h3>
-
+                    <h4 class="title">{{ 'Popular posts by likes' | translate }}</h4>
                 </template>
 
-                <template slot="footer">
-                        <reaction
-                            :reactions="{
-                                positive:reportData.total_comment_process.positive ,
-                                negative:reportData.total_comment_process.negative,
-                                neutral:reportData.total_comment_process.neutral}"></reaction>
+                <template slot="content">
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100">
+                            <md-table>
+                                <md-table-row>
+                                    <md-table-head>{{ 'Post' | translate }}</md-table-head>
+                                    <md-table-head>{{ 'Likes' | translate }}</md-table-head>
+                                    <md-table-head>{{ 'Rating' | translate }}</md-table-head>
+                                    <md-table-head>{{ 'Date' | translate }}</md-table-head>
+                                    <md-table-head>{{ 'Updated date' | translate }}</md-table-head>
+                                </md-table-row>
+
+                                <md-table-row v-for="(item, index) in postsByLikes" :key="index">
+                                    <md-table-cell class="thumbnail-table-row">
+                                        <div class="img-container">
+                                            <img :src="getThumbnail(item.thumbnail)"
+                                                 :alt="'Post thumbnail' | translate "/>
+                                        </div>
+                                        <p><small>{{ item.id }}</small></p>
+                                    </md-table-cell>
+                                    <md-table-cell>
+                                            <md-button class="md-primary  md-icon-button">
+                                                <div class="card-icon">
+                                                    <md-icon :title="'Like' | translate ">thumb_up</md-icon>
+                                                </div>
+                                            </md-button>
+                                            <small>{{ item.like_count }}</small>
+                                    </md-table-cell>
+                                    <md-table-cell>
+                                        <reaction
+                                            :reactions="{positive:item.positive ,negative:item.negative, neutral:item.neutral}"></reaction>
+                                    </md-table-cell>
+                                    <md-table-cell>
+                                        {{ item.formatted_date }}
+                                    </md-table-cell>
+                                    <md-table-cell>{{ item.formatted_updated_date }}</md-table-cell>
+                                </md-table-row>
+                            </md-table>
+                        </div>
+                    </div>
                 </template>
-            </stats-card>
+            </global-sales-card>
         </div>
 
 
@@ -209,13 +238,12 @@
 </template>
 
 <script>
-import AsyncWorldMap from "@/components/WorldMap/AsyncWorldMap.vue";
 import {
     StatsCard,
     ChartCard,
     AnimatedNumber,
+    GlobalSalesCard
 } from "@/components";
-import {Organization} from "@/interfaces/Organization";
 import Reaction from "@/components/Reaction";
 
 export default {
@@ -224,6 +252,7 @@ export default {
         StatsCard,
         ChartCard,
         AnimatedNumber,
+        GlobalSalesCard
     },
     data() {
         return {
@@ -232,6 +261,7 @@ export default {
             userKeywords: [],
             organizationKeywords: [],
             reportData: [],
+            postsByLikes: [],
 
 
             emailsSubscriptionChart: {
@@ -284,6 +314,7 @@ export default {
     created() {
         this.setKeywords();
         this.getReportData();
+        this.getPostsByLikes();
 
     },
     methods: {
@@ -305,6 +336,22 @@ export default {
                     if (error.response.status === 422) {
                         this.validationError = error.response.data.errors;
                     }
+                });
+        },
+        getPostsByLikes() {
+            this.axios.get(process.env.VUE_APP_API_URL + '/post', {
+                params: {
+                    page: 1,
+                    sort_by: 'like_count_desc',
+                    per_page: 5
+                }
+            })
+                .then(response => {
+                    console.log('www', response.data.items);
+                    this.postsByLikes = response.data.items;
+                })
+                .catch(error => {
+                    console.log(error);
                 });
         },
         handleResponse(response) {

@@ -54,6 +54,12 @@ Vue.mixin({
 			}
 			return false;
 		},
+        getThumbnail(fileName) {
+            if (fileName !== null) {
+                return process.env.VUE_APP_API_UPLOADS + fileName;
+            }
+            return this.publicURL + "img/image_placeholder.jpg";
+        },
 		isJson(str) {
 			try {
 				JSON.parse(str);

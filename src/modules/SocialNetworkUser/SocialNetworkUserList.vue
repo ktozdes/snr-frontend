@@ -20,14 +20,14 @@
                             <md-table-head>{{ 'Username' | translate }}</md-table-head>
                             <md-table-head>{{ 'Instagram ID' | translate }}</md-table-head>
                             <md-table-head md-numeric class="text-center">
-<!--                                <md-sort :sortingLabel="'post_count'" :sortBy="sortBy" @sorted="sorted">-->
+                                <md-sort :sortingLabel="'posts_count'" :sortBy="sortBy" @sorted="sorted">
                                     {{ 'Post count' | translate }}
-<!--                                </md-sort>-->
+                                </md-sort>
                             </md-table-head>
                             <md-table-head md-numeric class="text-center">
-                                <!--<md-sort :sortingLabel="'comment_count'" :sortBy="sortBy" @sorted="sorted">-->
+                                <md-sort :sortingLabel="'comments_count'" :sortBy="sortBy" @sorted="sorted">
                                     {{ 'Comment count' | translate }}
-                               <!--</md-sort>-->
+                               </md-sort>
                             </md-table-head>
 
                         </md-table-row>
@@ -102,6 +102,7 @@ export default {
             });
         },
         getItems() {
+            this.items = [];
             this.axios.get(process.env.VUE_APP_API_URL + '/social-network-user', {
                 params: {page: this.currentPage, sort_by: this.sortBy}
             })

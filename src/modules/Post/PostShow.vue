@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout">
+    <div class="md-layout page-post-show">
         <div class="md-layout-item md-size-100">
             <md-card>
                 <md-card-header class="md-card-header-icon md-card-header-green">
@@ -30,7 +30,8 @@
                             <div class="row">
                                 <div class="tim-typo">
                                     <span class="tim-note">{{ 'Author' | translate }}</span>
-                                    <p><a :href="'https://www.instagram.com/p/' + post.code" target="_blank">{{ post.author_username }}</a></p>
+                                    <p><a :href="'https://www.instagram.com/p/' + post.code"
+                                          target="_blank">{{ post.author_username }}</a></p>
                                 </div>
                                 <div class="tim-typo">
                                     <span class="tim-note">{{ 'Rating' | translate }}</span>
@@ -73,9 +74,14 @@
                 <md-card-content>
                     <pagination v-if="pageCount > 1" :pageCount="pageCount" v-model="currentPage" @input="paginate">
                     </pagination>
-                    <md-table v-model="items" table-header-color="green">
+                    <md-table  class="post-list-table" table-header-color="green">
                         <md-table-row>
                             <md-table-head md-numeric>{{ 'ID' | translate }}</md-table-head>
+                            <md-table-head md-numeric>
+                                <md-sort :sortingLabel="'like_count'" :sortBy="sortBy" @sorted="sorted">
+                                    {{ 'Likes' | translate }}
+                                </md-sort>
+                            </md-table-head>
                             <md-table-head>{{ 'Author' | translate }}</md-table-head>
                             <md-table-head>{{ 'Date' | translate }}</md-table-head>
                             <md-table-head>{{ 'Rating' | translate }}</md-table-head>
@@ -88,10 +94,27 @@
 
                         <md-table-row v-for="(item, index) in items" :key="index"
                                       :class="{'table-info': hasProcessed(item)}">
-                            <md-table-cell>{{ item.id }}
-                                <div class="card-icon">
-                                    <md-icon v-if="item.process_type === 'manual'">perm_identity</md-icon>
-                                    <md-icon v-else>computer</md-icon>
+                            <md-table-cell>
+                                <div class="post-list-item-extra">
+                                    <md-button class="md-primary md-icon-button">
+                                        <div class="card-icon">
+                                            <md-icon v-if="item.process_type === 'manual'"
+                                                     :title="'Manual' | translate ">perm_identity
+                                            </md-icon>
+                                            <md-icon v-else :title="'Automatic' | translate ">computer</md-icon>
+                                        </div>
+                                    </md-button>
+                                    <small>{{ item.id }}</small>
+                                </div>
+                            </md-table-cell>
+                            <md-table-cell>
+                                <div class="comment-list-item-extra">
+                                    <md-button class="md-primary md-icon-button">
+                                        <div class="card-icon">
+                                            <md-icon :title="'Like' | translate ">thumb_up</md-icon>
+                                        </div>
+                                    </md-button>
+                                    <small>{{ item.like_count }}</small>
                                 </div>
                             </md-table-cell>
                             <md-table-cell>{{ item.author_username }}</md-table-cell>
@@ -134,6 +157,7 @@ export default {
             items: [],
             currentPage: 1,
             pageCount: 0,
+            sortBy: 'id'
         };
     }
     ,
@@ -151,6 +175,11 @@ export default {
         paginate() {
             this.getComments();
         },
+        sorted(arg) {
+            this.sortBy = arg;
+            this.currentPage = 1;
+            this.getComments();
+        },
         getPost() {
             this.axios.get(process.env.VUE_APP_API_URL + '/post/show/' + this.post.id)
                 .then(response => {
@@ -163,8 +192,13 @@ export default {
                 });
         },
         getComments() {
+            this.items = [];
             this.axios.get(process.env.VUE_APP_API_URL + '/comment/' + this.post.id, {
-                params: {page: this.currentPage, keywords: this.keywords}
+                params: {
+                    page: this.currentPage,
+                    keywords: this.keywords,
+                    sort_by: this.sortBy,
+                }
             })
 
                 .then(response => {
@@ -218,9 +252,6 @@ export default {
             this.$store.dispatch('setRouterProp', item);
             this.$router.push({name: 'CommentEditor', params: {id: item.id}});
             //this.$router.push({name: 'CommentEditor'});
-        },
-        getThumbnail() {
-            return process.env.VUE_APP_API_UPLOADS + this.post.thumbnail;
         },
         hasProcessed(item) {
             return item.process_type === 'manual';
